@@ -2,9 +2,9 @@
 
 Manage DeepSeek Harness (DSH) skills and MCP servers from one place.
 
-Skills management · MCP servers · Claude/Codex import · Project folder picker · zh/en bilingual · Check updates
+Skills management · MCP servers · Skill import
 
-A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, one-click import from Claude Code and OpenAI Codex, and project-level folder selection, all in zh/en bilingual. Plugin management and a plugin marketplace are on the roadmap.
+A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, and one-click import from Claude Code and OpenAI Codex. Plugin management and a plugin marketplace are on the roadmap.
 
 🌏 [中文](README.zh.md) · English
 
@@ -37,6 +37,8 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 Restart `dsh web`, then open **Settings → Extension Management**.
 
+Install once — localization, update checks and everything else ship with version updates.
+
 ## Features
 
 | Feature | CLI | Settings UI |
@@ -47,8 +49,6 @@ Restart `dsh web`, then open **Settings → Extension Management**.
 | Create / edit / delete MCP (stdio / streamable-http) | ✅ | ✅ |
 | Import skills & MCP from Claude / Codex | ✅ | ✅ |
 | Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
-| Check this plugin for updates (npm registry) | — | ✅ |
-| Full zh / en localization, follows the DSH language switch | — | ✅ |
 
 **Built-in skills are read-only**: the list also shows skills bundled with the
 deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
@@ -157,15 +157,6 @@ dsh-extension-hub/
   the full record.
 - Global MCP removal/editing only affects manager-managed rows (inside the
   managed region); hand-written patch rows are untouched.
-
-## Publishing
-
-Before `npm publish`:
-
-1. Confirm the `name` (`dsh-extension-hub`) is still available on the registry;
-2. `node_modules/` is git-ignored (dev junction, never committed);
-3. Verify once from the registry on a clean profile:
-   `dsh plugin --profile web add dsh-extension-hub`.
 
 ## License
 

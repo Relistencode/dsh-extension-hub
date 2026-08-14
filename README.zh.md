@@ -2,9 +2,9 @@
 
 一站式管理 DeepSeek Harness（DSH）的 Skills 与 MCP 服务器。
 
-技能管理 · MCP 服务器 · Claude/Codex 导入 · 项目级文件夹 · 中英双语 · 检查更新
+技能管理 · MCP 服务器 · 技能导入
 
-一个服务化的 DSH 扩展中心：零依赖的持久层与 CLI，加上嵌进 DSH Web 设置页的持久化管理界面——新建 / 编辑 / 启用 / 停用技能与 MCP 服务器、从 Claude Code 与 OpenAI Codex 一键导入、项目级目标文件夹选择，全部支持中英双语。插件管理与插件市场已在规划中。
+一个服务化的 DSH 扩展中心：零依赖的持久层与 CLI，加上嵌进 DSH Web 设置页的持久化管理界面——新建 / 编辑 / 启用 / 停用技能与 MCP 服务器、从 Claude Code 与 OpenAI Codex 一键导入。插件管理与插件市场已在规划中。
 
 🌏 中文 · [English](README.md)
 
@@ -37,6 +37,8 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 重启 `dsh web`，然后打开 **设置 → 扩展管理**。
 
+安装一次即可，中英双语、检查更新等能力随版本更新。
+
 ## 主要功能
 
 | 功能 | CLI | 设置页 UI |
@@ -47,8 +49,6 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 | 新建 / 编辑 / 删除 MCP（stdio / streamable-http） | ✅ | ✅ |
 | 从 Claude / Codex 导入技能与 MCP | ✅ | ✅ |
 | 项目级安装（选择目标文件夹） | ✅（`folder` 命令） | ✅（DSH 目录选择器） |
-| 检查本插件是否有新版本（npm registry） | — | ✅ |
-| 完整中英双语，跟随 DSH 语言切换 | — | ✅ |
 
 **内置技能只读**：列表会一并显示 DSH 部署自带的技能（shipped presets，如 `cordis` 预设自带的技能）与用户预设目录中的技能，标记为"内置/预设"且不可编辑/删除/切换 —— 它们属于 deployment 或预设层；如需覆盖，在用户或项目目录新建同名技能即可。
 
@@ -127,14 +127,6 @@ dsh-extension-hub/
 - 项目级 MCP 依赖"生成预设 + 手动选预设"机制；本工具不会替你在会话间自动切换预设。
 - 项目级 MCP 的启用/禁用开关作用于生成的预设（即"这个项目选了这个预设时是否加载该服务器"），清单文件始终保留全部记录。
 - 全局 MCP 的删除/编辑只影响本管理器添加的行（受管区域内）；手写进 patch 的行不受影响。
-
-## 发布
-
-发布到 npm 前请确认：
-
-1. `package.json` 的 `name`（`dsh-extension-hub`）在 registry 上仍可用；
-2. `node_modules/` 已被 `.gitignore` 排除（开发用 junction，不入库）；
-3. `npm publish` 前在干净 profile 上用 `dsh plugin --profile web add dsh-extension-hub` 从 registry 安装验证一次。
 
 ## 许可证
 
