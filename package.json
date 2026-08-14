@@ -22,6 +22,7 @@
   "files": [
     "lib",
     "cli.mjs",
+    "docs",
     "README.md",
     "README.zh.md",
     "LICENSE"
