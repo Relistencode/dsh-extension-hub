@@ -1,14 +1,43 @@
 # dsh-extension-hub
 
-一站式管理 **DeepSeek Harness（DSH）** 的 **Skills** 与 **MCP 服务器**：自带零依赖 CLI，并提供嵌在 **DSH Web 设置页** 的持久化管理界面。
+一站式管理 DeepSeek Harness（DSH）的 Skills 与 MCP 服务器。
 
-包含三层：
+技能管理 · MCP 服务器 · Claude/Codex 导入 · 项目级文件夹 · 中英双语 · 检查更新
 
-1. **持久层**（`lib/*.mjs`）— 无第三方依赖，只做"受管区域"文本编辑，绝不破坏你手写的内容；
-2. **CLI**（`cli.mjs`）— 命令行管理技能/MCP，支持从 **Claude Code** 与 **OpenAI Codex** 检索并导入；
-3. **持久化 UI 插件**（`lib/host.js` + `lib/client.js`）— 双端 Cordis 插件，把全部功能嵌进 **DSH Web 设置页**（"扩展管理"分区），支持项目级目标文件夹选择。
+一个服务化的 DSH 扩展中心：零依赖的持久层与 CLI，加上嵌进 DSH Web 设置页的持久化管理界面——新建 / 编辑 / 启用 / 停用技能与 MCP 服务器、从 Claude Code 与 OpenAI Codex 一键导入、项目级目标文件夹选择，全部支持中英双语。插件管理与插件市场已在规划中。
 
-## 功能
+🌏 中文 · [English](README.md)
+
+## 快速开始
+
+**环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
+
+macOS / Linux（Windows 装了 Git Bash 或 WSL 也可）：
+
+```bash
+cd ~/.dsh/profiles/web
+pnpm add dsh-extension-hub
+grep -q "name: dsh-extension-hub" cordis.patch.yml || cat >> cordis.patch.yml <<'EOF'
+
+- insert:
+    - id: extension-hub
+      name: dsh-extension-hub
+EOF
+```
+
+Windows（PowerShell 5.1+ / pwsh）：
+
+```powershell
+cd "$env:USERPROFILE\.dsh\profiles\web"
+pnpm add dsh-extension-hub
+if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub' -Quiet)) {
+  Add-Content -Path cordis.patch.yml -Value "`n- insert:`n    - id: extension-hub`n      name: dsh-extension-hub"
+}
+```
+
+重启 `dsh web`，然后打开 **设置 → 扩展管理**。
+
+## 主要功能
 
 | 功能 | CLI | 设置页 UI |
 |---|---|---|
@@ -16,87 +45,28 @@
 | 新建 / 编辑 / 删除技能 | ✅ | ✅（表单 + Markdown 正文） |
 | 启用 / 禁用技能、MCP | ✅ | ✅ |
 | 新建 / 编辑 / 删除 MCP（stdio / streamable-http） | ✅ | ✅ |
-| 从 Claude / Codex 检索并导入技能与 MCP | ✅ | ✅ |
+| 从 Claude / Codex 导入技能与 MCP | ✅ | ✅ |
 | 项目级安装（选择目标文件夹） | ✅（`folder` 命令） | ✅（DSH 目录选择器） |
+| 检查本插件是否有新版本（npm registry） | — | ✅ |
+| 完整中英双语，跟随 DSH 语言切换 | — | ✅ |
 
 **内置技能只读**：列表会一并显示 DSH 部署自带的技能（shipped presets，如 `cordis` 预设自带的技能）与用户预设目录中的技能，标记为"内置/预设"且不可编辑/删除/切换 —— 它们属于 deployment 或预设层；如需覆盖，在用户或项目目录新建同名技能即可。
 
-**界面语言**：设置页分区完整支持 **zh / en 双语**，跟随 DSH Web 的语言切换实时更新。
+## 最近更新
 
-## CLI
+<details>
+<summary>最近更新（点击展开）</summary>
 
-```bash
-node cli.mjs <command> [...]
+- **2026-08** — 抬头新增"检查更新"按钮：对比本地版本与 npm registry 最新版。
+- **2026-08** — 分区更名为 **扩展管理** 并加抬头（"管理插件、技能和 MCP"）；导入从独立页签并入技能 / MCP 服务器页。
+- **2026-08** — 完整中英双语（83 个文案键）、项目级文件夹选择、内置技能只读层。
+- 首个版本 — CLI + 持久化设置页 UI + 零依赖持久层。
 
-# 查看
-node cli.mjs list [--skills|--mcp|--all] [--json]
+</details>
 
-# 从 Claude / Codex 检索与导入
-node cli.mjs discover <claude|codex> [--skills|--mcp|--all] [--json]
-node cli.mjs import <claude|codex> (--skills|--mcp) [--scope project|global] [--names a,b] [--dry-run] [--json]
+## 工作原理
 
-# 技能 CRUD
-node cli.mjs get skill <name> [--scope project|global] [--json]
-node cli.mjs create skill <name> [--description S] [--when-to-use S] [--license S] \
-                  [--user-invocable true|false] [--body S] [--body-file PATH] [--scope project|global] [--json]
-node cli.mjs edit skill <name> [--new-name S] [--description S] [--when-to-use S] [--license S] \
-                  [--user-invocable true|false] [--body S] [--body-file PATH] [--scope project|global] [--json]
-node cli.mjs enable  skill <name> [--scope project|global] [--json]
-node cli.mjs disable skill <name> [--scope project|global] [--json]
-node cli.mjs remove  skill <name> [--scope project|global] [--json]
-
-# MCP CRUD
-node cli.mjs create mcp <serverName> [--transport stdio|streamable-http] [--command CMD] \
-                  [--args a,b] [--env k=v,...] [--url U] [--headers k=v,...] [--scope project|global] [--json]
-node cli.mjs edit mcp <name|id> [同上参数] [--scope project|global] [--json]
-node cli.mjs enable  mcp <name> [--scope project|global] [--json]
-node cli.mjs disable mcp <name> [--scope project|global] [--json]
-node cli.mjs remove  mcp <name> [--scope project|global] [--json]
-
-# 项目级目标文件夹记忆
-node cli.mjs folder <path> [--json]
-node cli.mjs state [--json]
-```
-
-所有命令支持 `--json`（结构化输出，供 UI / 脚本消费）。
-
-## 设置页 UI（DSH Web）
-
-插件在设置页注册一个 **"扩展管理"** 分区：顶部有抬头（"管理插件、技能和 MCP"），下方两个页签：
-
-- **技能**：列表（范围徽章、启用开关、编辑、删除）+ 新建（表单：名称/描述/whenToUse/许可证/user-invocable + Markdown 正文）
-- **MCP 服务器**：列表（transport 徽章、启用开关、编辑、删除）+ 新建（stdio：命令/参数/环境变量；streamable-http：URL/请求头）
-
-每个页签右上角都有 **"从 Claude/Codex 导入…"** 按钮，弹出导入窗口（类型固定为该页的 skills 或 mcp）：选来源 → 检索 → 勾选 → 选择范围（项目/全局）→ 导入。
-
-**项目级目标文件夹**："选择文件夹…"按钮调用宿主目录选择器（native 对话框或内嵌目录浏览器，取决于部署），选择结果记入 `~/.dsh/extension-hub/state.json`，重启后仍然记得。
-
-### 安装（在你自己的 DSH 上）
-
-```bash
-# 1. 把本包作为依赖装进 web profile
-cd ~/.dsh/profiles/web
-pnpm add dsh-extension-hub            # 从 npm registry
-# 或：pnpm add <本仓库路径>            # 本地 / git checkout
-
-# 2. 在宿主补丁里挂插件行（dsh 重启后生效）
-#    编辑 ~/.dsh/profiles/web/cordis.patch.yml 追加：
-#    - insert:
-#        - id: extension-hub
-#          name: dsh-extension-hub
-
-# 3. 重启 dsh web
-```
-
-> **开发模式（本仓库即源码）**：`pnpm add file:...` 会以 junction 链接到仓库目录。ESM 从物理路径解析依赖，因此需要在仓库内提供依赖解析：
-> ```bash
-> mklink /J node_modules\@deepseek-ai <你的 DSH profiles>\node_modules\@deepseek-ai
-> ```
-> 从 npm registry 安装的正式包不需要这一步（依赖会随包安装）。
-
-### 工作原理
-
-- 宿主侧 `lib/host.js` 是一个 `TypertRemoteService` 网关（wire 命名空间 `extensionHub`）；浏览器侧挂载自己的 Remote contribution，通过挂载后的命名空间服务调用（不走编译期固定的 `connection.api` 静态面）。
+- 宿主侧 `lib/host.js` 是一个 `TypertRemoteService` 网关（wire 命名空间 `extensionHub`）；浏览器侧挂载自己的 Remote contribution，通过挂载后的命名空间服务调用。
 - 浏览器包在 `package.json` 里声明 `dsh.client.platform: "web"`，DSH 的 client-modules 系统在启动时扫描并注入 boot manifest，通过 `/plugins/dsh-extension-hub/client.js` 路由动态服务 —— **无需重建 web bundle**。
 - 所有真实读写都在宿主进程内完成（不受会话文件沙箱限制），与 CLI 共用同一套 `lib/` 代码。
 
@@ -123,6 +93,10 @@ pnpm add dsh-extension-hub            # 从 npm registry
 - **全局** → 在宿主补丁 `~/.dsh/profiles/<profile>/cordis.patch.yml` 的受管区域（`# >>> dsh-extension-hub` … `# <<< dsh-extension-hub`）追加/改写 `- insert: {id, name: '@deepseek-ai/dsh-mcp-client', config}` 行。
 - **项目级** → 写清单 `<目标文件夹>/.dsh/mcp-servers.yaml`，并生成专用预设 `~/.dsh/.agent-presets/<slug>-mcp/agent.cordis.yml`（以 shipped `standard` 为基底）。在会话预设选择器里选该预设即可生效。
 
+## 支持平台
+
+DSH 本身支持 Windows、macOS 与 Linux；本插件无平台特殊性 —— CLI 在任意 Node.js 环境可用，设置页 UI 跟随 DSH Web 宿主。
+
 ## 目录结构
 
 ```
@@ -146,7 +120,7 @@ dsh-extension-hub/
     client.js         # 插件浏览器端：设置页"扩展管理"分区 UI
 ```
 
-## 已知边界
+## 已知限制
 
 - YAML/TOML 解析器是自带的**子集**实现，覆盖 DSH composition 与 Codex `config.toml` 的实际形态；遇到未覆盖写法会跳过或报错，不会静默破坏文件。
 - Skill 发现与 DSH `dsh-skill-filesystem` 一致：只识别 `<root>/<name>/SKILL.md` 与 `<root>/<name>.md`，`name` 必须 kebab-case。

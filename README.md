@@ -1,18 +1,41 @@
 # dsh-extension-hub
 
-Manage **DeepSeek Harness (DSH)** skills and MCP servers from one place — with a
-dependency-free CLI and a durable settings-page UI for the DSH Web app.
+Manage DeepSeek Harness (DSH) skills and MCP servers from one place.
 
-Three layers in one package:
+Skills management · MCP servers · Claude/Codex import · Project folder picker · zh/en bilingual · Check updates
 
-1. **Persistence core** (`lib/*.mjs`) — zero third-party dependencies. Only
-   edits text inside its own managed regions; your hand-written content is
-   never touched.
-2. **CLI** (`cli.mjs`) — manage skills/MCP from the terminal and import from
-   **Claude Code** and **OpenAI Codex**.
-3. **Durable UI plugin** (`lib/host.js` + `lib/client.js`) — a dual-face Cordis
-   plugin that embeds everything into the **DSH Web settings page**
-   ("Extension Management" section) with project-level folder selection.
+A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, one-click import from Claude Code and OpenAI Codex, and project-level folder selection, all in zh/en bilingual. Plugin management and a plugin marketplace are on the roadmap.
+
+🌏 [中文](README.zh.md) · English
+
+## Quick Start
+
+**Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
+
+macOS / Linux (Windows with Git Bash or WSL works too):
+
+```bash
+cd ~/.dsh/profiles/web
+pnpm add dsh-extension-hub
+grep -q "name: dsh-extension-hub" cordis.patch.yml || cat >> cordis.patch.yml <<'EOF'
+
+- insert:
+    - id: extension-hub
+      name: dsh-extension-hub
+EOF
+```
+
+Windows (PowerShell 5.1+ / pwsh):
+
+```powershell
+cd "$env:USERPROFILE\.dsh\profiles\web"
+pnpm add dsh-extension-hub
+if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub' -Quiet)) {
+  Add-Content -Path cordis.patch.yml -Value "`n- insert:`n    - id: extension-hub`n      name: dsh-extension-hub"
+}
+```
+
+Restart `dsh web`, then open **Settings → Extension Management**.
 
 ## Features
 
@@ -24,6 +47,8 @@ Three layers in one package:
 | Create / edit / delete MCP (stdio / streamable-http) | ✅ | ✅ |
 | Import skills & MCP from Claude / Codex | ✅ | ✅ |
 | Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
+| Check this plugin for updates (npm registry) | — | ✅ |
+| Full zh / en localization, follows the DSH language switch | — | ✅ |
 
 **Built-in skills are read-only**: the list also shows skills bundled with the
 deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
@@ -31,99 +56,27 @@ shipped inside user presets, marked "Built-in/Preset" and not editable /
 deletable / toggleable — they belong to the deployment or preset layer. To
 override, create a same-name skill in the user or project directory.
 
-**Localization**: the settings section is fully **zh / en** bilingual and
-follows the DSH Web language switch live.
+## Recent Updates
 
-## CLI
+<details>
+<summary>Recent updates (click to expand)</summary>
 
-```bash
-node cli.mjs <command> [...]
+- **2026-08** — "Check Updates" button in the header: compares the local package version against the npm registry.
+- **2026-08** — Section renamed to **Extension Management** with a header ("Manage plugins, skills and MCP"); import moved from its own tab into the Skills and MCP Servers pages.
+- **2026-08** — Full zh/en i18n (83 keys), project folder picker, built-in skill read-only layer.
+- Initial release — CLI + durable settings UI + zero-dependency persistence core.
 
-# Inspect
-node cli.mjs list [--skills|--mcp|--all] [--json]
+</details>
 
-# Discover / import from Claude / Codex
-node cli.mjs discover <claude|codex> [--skills|--mcp|--all] [--json]
-node cli.mjs import <claude|codex> (--skills|--mcp) [--scope project|global] [--names a,b] [--dry-run] [--json]
-
-# Skill CRUD
-node cli.mjs get skill <name> [--scope project|global] [--json]
-node cli.mjs create skill <name> [--description S] [--when-to-use S] [--license S] \
-                  [--user-invocable true|false] [--body S] [--body-file PATH] [--scope project|global] [--json]
-node cli.mjs edit skill <name> [--new-name S] [--description S] [--when-to-use S] [--license S] \
-                  [--user-invocable true|false] [--body S] [--body-file PATH] [--scope project|global] [--json]
-node cli.mjs enable  skill <name> [--scope project|global] [--json]
-node cli.mjs disable skill <name> [--scope project|global] [--json]
-node cli.mjs remove  skill <name> [--scope project|global] [--json]
-
-# MCP CRUD
-node cli.mjs create mcp <serverName> [--transport stdio|streamable-http] [--command CMD] \
-                  [--args a,b] [--env k=v,...] [--url U] [--headers k=v,...] [--scope project|global] [--json]
-node cli.mjs edit mcp <name|id> [same flags] [--scope project|global] [--json]
-node cli.mjs enable  mcp <name> [--scope project|global] [--json]
-node cli.mjs disable mcp <name> [--scope project|global] [--json]
-node cli.mjs remove  mcp <name> [--scope project|global] [--json]
-
-# Remember the project-level target folder
-node cli.mjs folder <path> [--json]
-node cli.mjs state [--json]
-```
-
-Every command supports `--json` (structured output for scripts and UIs).
-
-## Settings UI (DSH Web)
-
-The plugin registers an **"Extension Management"** section in the settings
-page, with a header ("Manage plugins, skills and MCP") and two tabs:
-
-- **Skills**: list (scope badge, enable switch, edit, delete) + create (form:
-  name / description / whenToUse / license / user-invocable + Markdown body)
-- **MCP Servers**: list (transport badge, enable switch, edit, delete) +
-  create (stdio: command / args / env; streamable-http: URL / headers)
-
-Each tab has its own **"Import from Claude/Codex…"** button that opens a modal
-with the type fixed to that page (skills or MCP): pick source → scan → check
-items → choose scope (project/global) → import.
-
-**Project folder**: the "Choose Folder…" button uses the host directory picker
-(native dialog or in-app browser, depending on the deployment); the choice is
-remembered in `~/.dsh/extension-hub/state.json` across reloads.
-
-### Install (on your own DSH)
-
-```bash
-# 1. Add this package as a dependency of the web profile
-cd ~/.dsh/profiles/web
-pnpm add dsh-extension-hub            # from the npm registry
-# or: pnpm add <path-to-this-repo>    # local / git checkout
-
-# 2. Mount the plugin row in the host patch (takes effect after a dsh restart)
-#    append to ~/.dsh/profiles/web/cordis.patch.yml:
-#    - insert:
-#        - id: extension-hub
-#          name: dsh-extension-hub
-
-# 3. Restart dsh web
-```
-
-> **Development mode (this repo as the source)**: `pnpm add file:...` links the
-> profile to this directory. ESM resolves dependencies from the physical path,
-> so the repo needs a resolution link:
-> ```bash
-> mklink /J node_modules\@deepseek-ai <your DSH profiles>\node_modules\@deepseek-ai
-> ```
-> Packages installed from the npm registry do not need this step.
-
-### How it works
+## How it works
 
 - The host half (`lib/host.js`) is a `TypertRemoteService` gateway exposed
   under the `extensionHub` wire namespace; the browser half mounts its Remote
-  contribution and calls the mounted namespace service (never the compiled
-  static `connection.api` surface).
+  contribution and calls the mounted namespace service.
 - The browser bundle is declared via `dsh.client.platform: "web"` in
-  `package.json`; the DSH client-modules system scans it at boot, injects the
-  boot manifest, and serves the bundle over `/plugins/dsh-extension-hub/client.js`
-  — **no web bundle rebuild required**.
+  `package.json`; DSH's client-modules system scans it at boot, injects the
+  boot manifest, and serves the bundle over
+  `/plugins/dsh-extension-hub/client.js` — **no web bundle rebuild required**.
 - All real reads/writes run inside the host process (outside the session file
   sandbox) and share the same `lib/` code as the CLI.
 
@@ -155,9 +108,16 @@ frontmatter flags; removal deletes the file.
   (`# >>> dsh-extension-hub` … `# <<< dsh-extension-hub`) of
   `~/.dsh/profiles/<profile>/cordis.patch.yml`.
 - **Project** → writes a manifest `<target folder>/.dsh/mcp-servers.yaml` and
-  generates a dedicated preset `~/.dsh/.agent-presets/<slug>-mcp/agent.cordis.yml`
-  (based on the shipped `standard` preset). Select that preset in the session
-  roster to activate the servers.
+  generates a dedicated preset
+  `~/.dsh/.agent-presets/<slug>-mcp/agent.cordis.yml` (based on the shipped
+  `standard` preset). Select that preset in the session roster to activate
+  the servers.
+
+## Supported platforms
+
+DSH itself runs on Windows, macOS and Linux; this plugin has no platform
+specifics — the CLI works anywhere Node.js runs, and the settings UI follows
+the DSH Web host.
 
 ## Repository layout
 
