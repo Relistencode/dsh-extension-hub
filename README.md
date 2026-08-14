@@ -1,10 +1,15 @@
 # dsh-extension-hub
 
+> **New in v0.2.0** — Now you can manage your plugins properly. Extension Hub
+> manages **official and third-party plugins**, lets you enable them as you see
+> fit, **install open-source third-party plugins directly inside DSH**, and
+> **keep them updated** at any time.
+
 Manage DeepSeek Harness (DSH) skills and MCP servers from one place.
 
-Skills management · MCP servers · Skill import
+Skills management · MCP servers · Skill import · Plugin management
 
-A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, and one-click import from Claude Code and OpenAI Codex. Plugin management and a plugin marketplace are on the roadmap.
+A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, one-click import from Claude Code and OpenAI Codex, and a full plugin manager (official vs third-party, enable / disable / uninstall, check & update, and a GitHub-powered plugin discover & install page).
 
 🌏 [中文](README.zh.md) · English
 
@@ -56,11 +61,83 @@ shipped inside user presets, marked "Built-in/Preset" and not editable /
 deletable / toggleable — they belong to the deployment or preset layer. To
 override, create a same-name skill in the user or project directory.
 
+| Import skills & MCP from Claude / Codex and other tools | ✅ | ✅ |
+| Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
+| Manage plugins (official vs other, enable / disable / uninstall) | — | ✅ |
+| Discover & install GitHub `dsh-plugin` repositories | — | ✅ |
+| Check & update third-party plugins | — | ✅ |
+
+**Built-in skills are read-only**: the list also shows skills bundled with the
+deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
+shipped inside user presets, marked "Built-in/Preset" and not editable /
+deletable / toggleable — they belong to the deployment or preset layer. To
+override, create a same-name skill in the user or project directory.
+
+## Plugin Management Guide
+
+The **Extension Management** page ships a full plugin manager since v0.2.0,
+with four tabs: **Skills / MCP Servers / Plugins / Discover**.
+
+![Extension Hub overview](docs/screenshots/feature-overview.png)
+
+### Managing installed plugins
+
+The **Plugins** tab lists every plugin row in your DSH composition, split into
+two collapsible groups:
+
+- **Official Plugins** — DeepSeek's own `@deepseek-ai/*` packages (collapsed by
+  default). They can be disabled but not uninstalled; the `cordis:include`
+  entry is the composition loader itself and is marked **Core** — it cannot be
+  disabled or removed.
+- **Other Plugins** — third-party and your own plugins (e.g. this one).
+
+Click a plugin to see its details: description, source, repository link, entry
+id and module name. From the detail block you can:
+
+- **Enable / Disable** — written to your profile `cordis.patch.yml`; takes
+  effect after a `dsh web` restart. Disabling warns you that an unknown plugin
+  may cause serious problems.
+- **Uninstall** (non-official only) — removes the plugin row from the
+  configuration, with a warning plus a second "Confirm uninstall?" step. If the
+  plugin was installed through the Discover tab, its local clone is deleted too.
+
+The **Other Plugins** group header has **Check Updates**: it compares npm
+packages against the registry and local git clones against their origin HEAD.
+Updateable plugins get a green **Update Available** button next to their status
+label — click it to pull the new version (npm tarball or `git pull`), or use
+**Update All** to update every updateable plugin at once.
+
+![Managing your plugins](docs/screenshots/manage-plugins.png)
+
+### Discovering & installing new plugins
+
+The **Discover** tab searches GitHub for repositories tagged `dsh-plugin` (a
+free-text query narrows the search). Each result shows stars and an
+"Installed" badge when the repo is already present locally.
+
+Click a repository to open its detail page — description, stars, language, last
+update and a link to the repository — then hit **Install**. Extension Hub:
+
+1. Clones the repository (shallow) into `~/.dsh/extension-hub/plugins/<repo>`
+2. Verifies it ships a usable `package.json` entry
+3. Registers it in your profile `cordis.patch.yml` as a local-path plugin row
+
+After a `dsh web` restart the plugin appears in the **Other Plugins** group,
+where you can disable or uninstall it (which also removes the clone) and keep
+it updated with **Check Updates** (local git clones update via `git pull`).
+
+![Installing plugins online](docs/screenshots/install-plugins.png)
+
+> Installing runs third-party code. Only install repositories you trust, and
+> check the repository's own README for install instructions — a repo tagged
+> `dsh-plugin` may still be a skill, an MCP server, or need a custom setup.
+
 ## Recent Updates
 
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.0: full plugin manager — official vs third-party grouping (vendor-scope based), core protection for the composition loader, enable / disable / uninstall with confirmations, per-plugin check & update (npm registry + local git clones, Update All), and a GitHub-powered **Discover** tab that clones and installs `dsh-plugin` repositories in one click.
 - **2026-08** — v0.1.4: package the v0.1.3 changelog into the published artifact (registry-sync release).
 - **2026-08** — v0.1.3: strict Typert descriptors (`./typert`) fix `/api/extensionHub/*` 404 in layouts where the protocol package loads twice; one-click update downloads the npm tarball directly (no pnpm).
 - **2026-08** — "Check Updates" button in the header: compares the local package version against the npm registry.
