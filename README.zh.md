@@ -100,6 +100,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.1：发现插件分页（"加载更多"，每页 30）、插件详情改为弹窗、真实的"已安装"标记（按配置行校验，而非仅看克隆目录）、安装写入自检、横向溢出修复。
 - **2026-08** — v0.2.0：完整插件管理器——官方/第三方分组（按厂商 scope）、组合加载器核心保护、带确认的启用/停用/卸载、逐个插件检查与更新（npm registry + 本地 git 克隆，支持全部更新）、以及基于 GitHub 的**发现插件**页（一键克隆安装 `dsh-plugin` 仓库）。
 - **2026-08** — v0.1.4：将 v0.1.3 更新说明同步进发布包（registry 同步发布）。
 - **2026-08** — v0.1.3：新增严格 Typert 描述符（`./typert`），修复协议包重复加载布局下 `/api/extensionHub/*` 404 的问题；一键更新直接下载 npm tarball（不依赖 pnpm）。

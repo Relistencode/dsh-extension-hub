@@ -137,6 +137,7 @@ it updated with **Check Updates** (local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.1: Discover tab pagination ("Load more", 30 per page), plugin detail as a modal popup, truthful "Installed" badges (verified against the config row, not just the clone dir), install write-back verification, horizontal-overflow fixes.
 - **2026-08** — v0.2.0: full plugin manager — official vs third-party grouping (vendor-scope based), core protection for the composition loader, enable / disable / uninstall with confirmations, per-plugin check & update (npm registry + local git clones, Update All), and a GitHub-powered **Discover** tab that clones and installs `dsh-plugin` repositories in one click.
 - **2026-08** — v0.1.4: package the v0.1.3 changelog into the published artifact (registry-sync release).
 - **2026-08** — v0.1.3: strict Typert descriptors (`./typert`) fix `/api/extensionHub/*` 404 in layouts where the protocol package loads twice; one-click update downloads the npm tarball directly (no pnpm).
