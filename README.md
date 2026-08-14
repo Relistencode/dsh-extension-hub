@@ -1,39 +1,52 @@
 # dsh-extension-hub
 
-管理 DeepSeek Harness（DSH）的 **Skills** 与 **MCP 服务器** 的一体化工具，包含三层：
+Manage **DeepSeek Harness (DSH)** skills and MCP servers from one place — with a
+dependency-free CLI and a durable settings-page UI for the DSH Web app.
 
-1. **持久层**（`lib/*.mjs`）— 无第三方依赖，只做"受管区域"文本编辑，绝不破坏你手写的内容；
-2. **CLI**（`cli.mjs`）— 命令行管理技能/MCP，支持从 **Claude Code** 与 **OpenAI Codex** 检索并导入；
-3. **持久化 UI 插件**（`lib/host.js` + `lib/client.js`）— 双端 Cordis 插件，把全部功能嵌进 **DSH Web 设置页**（"Extension Hub" 分区（设置页导航）），支持项目级目标文件夹选择。
+Three layers in one package:
 
-## 功能
+1. **Persistence core** (`lib/*.mjs`) — zero third-party dependencies. Only
+   edits text inside its own managed regions; your hand-written content is
+   never touched.
+2. **CLI** (`cli.mjs`) — manage skills/MCP from the terminal and import from
+   **Claude Code** and **OpenAI Codex**.
+3. **Durable UI plugin** (`lib/host.js` + `lib/client.js`) — a dual-face Cordis
+   plugin that embeds everything into the **DSH Web settings page**
+   ("Extension Management" section) with project-level folder selection.
 
-| 功能 | CLI | 设置页 UI |
+## Features
+
+| Feature | CLI | Settings UI |
 |---|---|---|
-| 列出技能 / MCP（含启用状态、范围） | ✅ | ✅ |
-| 新建 / 编辑 / 删除技能 | ✅ | ✅（表单 + Markdown 正文） |
-| 启用 / 禁用技能、MCP | ✅ | ✅ |
-| 新建 / 编辑 / 删除 MCP（stdio / streamable-http） | ✅ | ✅ |
-| 从 Claude / Codex 检索并导入技能与 MCP | ✅ | ✅ |
-| 项目级安装（选择目标文件夹） | ✅（`folder` 命令） | ✅（DSH 目录选择器） |
+| List skills / MCP (enabled state, scope) | ✅ | ✅ |
+| Create / edit / delete skills | ✅ | ✅ (form + Markdown body) |
+| Enable / disable skills & MCP | ✅ | ✅ |
+| Create / edit / delete MCP (stdio / streamable-http) | ✅ | ✅ |
+| Import skills & MCP from Claude / Codex | ✅ | ✅ |
+| Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
 
-**内置技能只读**：列表会一并显示 DSH 部署自带的技能（shipped presets，如 `cordis` 预设自带的技能）与用户预设目录中的技能，标记为"内置/预设"且不可编辑/删除/切换 —— 它们属于 deployment 或预设层；如需覆盖，在用户或项目目录新建同名技能即可。
+**Built-in skills are read-only**: the list also shows skills bundled with the
+deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
+shipped inside user presets, marked "Built-in/Preset" and not editable /
+deletable / toggleable — they belong to the deployment or preset layer. To
+override, create a same-name skill in the user or project directory.
 
-**界面语言**：设置页分区完整支持 **zh / en 双语**，跟随 DSH Web 的语言切换实时更新；品牌名统一为 "Extension Hub"。
+**Localization**: the settings section is fully **zh / en** bilingual and
+follows the DSH Web language switch live.
 
 ## CLI
 
 ```bash
 node cli.mjs <command> [...]
 
-# 查看
+# Inspect
 node cli.mjs list [--skills|--mcp|--all] [--json]
 
-# 从 Claude / Codex 检索与导入
+# Discover / import from Claude / Codex
 node cli.mjs discover <claude|codex> [--skills|--mcp|--all] [--json]
 node cli.mjs import <claude|codex> (--skills|--mcp) [--scope project|global] [--names a,b] [--dry-run] [--json]
 
-# 技能 CRUD
+# Skill CRUD
 node cli.mjs get skill <name> [--scope project|global] [--json]
 node cli.mjs create skill <name> [--description S] [--when-to-use S] [--license S] \
                   [--user-invocable true|false] [--body S] [--body-file PATH] [--scope project|global] [--json]
@@ -46,114 +59,154 @@ node cli.mjs remove  skill <name> [--scope project|global] [--json]
 # MCP CRUD
 node cli.mjs create mcp <serverName> [--transport stdio|streamable-http] [--command CMD] \
                   [--args a,b] [--env k=v,...] [--url U] [--headers k=v,...] [--scope project|global] [--json]
-node cli.mjs edit mcp <name|id> [同上参数] [--scope project|global] [--json]
+node cli.mjs edit mcp <name|id> [same flags] [--scope project|global] [--json]
 node cli.mjs enable  mcp <name> [--scope project|global] [--json]
 node cli.mjs disable mcp <name> [--scope project|global] [--json]
 node cli.mjs remove  mcp <name> [--scope project|global] [--json]
 
-# 项目级目标文件夹记忆
+# Remember the project-level target folder
 node cli.mjs folder <path> [--json]
 node cli.mjs state [--json]
 ```
 
-所有命令支持 `--json`（结构化输出，供 UI / 脚本消费）。
+Every command supports `--json` (structured output for scripts and UIs).
 
-## 持久化 UI 插件（DSH Web 设置页）
+## Settings UI (DSH Web)
 
-插件在设置页注册一个 **"技能与 MCP"** 分区，内含三个页签：
+The plugin registers an **"Extension Management"** section in the settings
+page, with a header ("Manage plugins, skills and MCP") and two tabs:
 
-- **技能**：列表（范围徽章、启用开关、编辑、删除）+ 新建（表单：名称/描述/whenToUse/许可证/user-invocable + Markdown 正文）
-- **MCP 服务器**：列表（transport 徽章、启用开关、编辑、删除）+ 新建（stdio：命令/参数/环境变量；streamable-http：URL/请求头）
-- **从 Claude/Codex 导入**：选来源与类型 → 检索 → 勾选 → 选择范围（项目/全局）→ 导入
+- **Skills**: list (scope badge, enable switch, edit, delete) + create (form:
+  name / description / whenToUse / license / user-invocable + Markdown body)
+- **MCP Servers**: list (transport badge, enable switch, edit, delete) +
+  create (stdio: command / args / env; streamable-http: URL / headers)
 
-**项目级目标文件夹**：顶部"选择文件夹…"按钮调用宿主目录选择器（native 对话框或内嵌目录浏览器，取决于部署），选择结果记入 `~/.dsh/mcp-skill-manager/state.json`，重启后仍然记得。
+Each tab has its own **"Import from Claude/Codex…"** button that opens a modal
+with the type fixed to that page (skills or MCP): pick source → scan → check
+items → choose scope (project/global) → import.
 
-### 安装（在你自己的 DSH 上）
+**Project folder**: the "Choose Folder…" button uses the host directory picker
+(native dialog or in-app browser, depending on the deployment); the choice is
+remembered in `~/.dsh/extension-hub/state.json` across reloads.
+
+### Install (on your own DSH)
 
 ```bash
-# 1. 把本仓库作为依赖装进 web profile
+# 1. Add this package as a dependency of the web profile
 cd ~/.dsh/profiles/web
-pnpm add <本仓库路径或 registry 包名>
+pnpm add dsh-extension-hub            # from the npm registry
+# or: pnpm add <path-to-this-repo>    # local / git checkout
 
-# 2. 在宿主补丁里挂插件行（dsh 重启后生效）
-#    编辑 ~/.dsh/profiles/web/cordis.patch.yml 追加：
+# 2. Mount the plugin row in the host patch (takes effect after a dsh restart)
+#    append to ~/.dsh/profiles/web/cordis.patch.yml:
 #    - insert:
 #        - id: extension-hub
 #          name: dsh-extension-hub
 
-# 3. 重启 dsh web
+# 3. Restart dsh web
 ```
 
-> **开发模式（本仓库即源码）**：`pnpm add file:...` 会以 junction 链接到仓库目录。ESM 从物理路径解析依赖，因此需要在仓库内提供依赖解析：
+> **Development mode (this repo as the source)**: `pnpm add file:...` links the
+> profile to this directory. ESM resolves dependencies from the physical path,
+> so the repo needs a resolution link:
 > ```bash
-> mklink /J node_modules\@deepseek-ai <你的 DSH profiles>\node_modules\@deepseek-ai
+> mklink /J node_modules\@deepseek-ai <your DSH profiles>\node_modules\@deepseek-ai
 > ```
-> 从 npm registry 安装的正式包不需要这一步（依赖会随包安装）。
+> Packages installed from the npm registry do not need this step.
 
-### 工作原理
+### How it works
 
-- 宿主侧 `lib/host.js` 是一个 `TypertRemoteService` 网关（wire 命名空间 `skillMcpManager`），把持久层函数暴露为 JSON RPC；浏览器侧 `lib/client.js` 通过 `connection.api.skillMcpManager.*` 调用。
-- 浏览器包在 `package.json` 里声明 `dsh.client.platform: "web"`，DSH 的 client-modules 系统在启动时扫描并注入 boot manifest，通过 `/plugins/dsh-extension-hub/client.js` 路由动态服务 —— **无需重建 web bundle**。
-- 所有真实读写都在宿主进程内完成（不受会话文件沙箱限制），与 CLI 共用同一套 `lib/` 代码。
+- The host half (`lib/host.js`) is a `TypertRemoteService` gateway exposed
+  under the `extensionHub` wire namespace; the browser half mounts its Remote
+  contribution and calls the mounted namespace service (never the compiled
+  static `connection.api` surface).
+- The browser bundle is declared via `dsh.client.platform: "web"` in
+  `package.json`; the DSH client-modules system scans it at boot, injects the
+  boot manifest, and serves the bundle over `/plugins/dsh-extension-hub/client.js`
+  — **no web bundle rebuild required**.
+- All real reads/writes run inside the host process (outside the session file
+  sandbox) and share the same `lib/` code as the CLI.
 
-## 数据来源（检索范围）
+## Data sources (discovery scope)
 
-| 来源 | Skills | MCP |
+| Source | Skills | MCP |
 |---|---|---|
-| **Claude** | `<repo>/.claude/skills/*/SKILL.md`、`~/.claude/skills/*/SKILL.md` | `<repo>/.mcp.json`、`~/.claude.json`、`~/.claude/.claude.json` |
-| **Codex** | `<repo>/.codex/skills/*/SKILL.md`、`~/.codex/skills/*/SKILL.md` | `~/.codex/config.toml`、`<repo>/.codex/config.toml` |
+| **Claude** | `<repo>/.claude/skills/*/SKILL.md`, `~/.claude/skills/*/SKILL.md` | `<repo>/.mcp.json`, `~/.claude.json`, `~/.claude/.claude.json` |
+| **Codex** | `<repo>/.codex/skills/*/SKILL.md`, `~/.codex/skills/*/SKILL.md` | `~/.codex/config.toml`, `<repo>/.codex/config.toml` |
 
-转换时：Claude/Codex 的 `stdio` 服务器 → DSH `transport: stdio`（`command`/`args`/`env`）；`http`/`sse` → `transport: streamable-http`（`url`/`headers`）。Skill 的 `name`/`description`/`whenToUse` 保留，`license`/`allowed-tools` 折入 `metadata`。
+Conversion: Claude/Codex `stdio` servers → DSH `transport: stdio`
+(`command`/`args`/`env`); `http`/`sse` → `transport: streamable-http`
+(`url`/`headers`). Skill `name`/`description`/`whenToUse` are preserved,
+`license`/`allowed-tools` fold into `metadata`.
 
-## 安装位置（DSH 持久化落点）
+## Persistence locations
 
 ### Skills
 
-- **项目级** `--scope project` → `<目标文件夹>/.dsh/skills/<name>/SKILL.md`
-- **全局** `--scope global` → `~/.dsh/skills/<name>/SKILL.md`
+- **Project scope** `--scope project` → `<target folder>/.dsh/skills/<name>/SKILL.md`
+- **Global scope** `--scope global` → `~/.dsh/skills/<name>/SKILL.md`
 
-启用/禁用通过改写 `SKILL.md` frontmatter 的 `disable-model-invocation` / `user-invocable` 实现；删除即移除文件。
+Enable/disable rewrites the `disable-model-invocation` / `user-invocable`
+frontmatter flags; removal deletes the file.
 
 ### MCP
 
-- **全局** → 在宿主补丁 `~/.dsh/profiles/<profile>/cordis.patch.yml` 的受管区域（`# >>> dsh-mcp-skill-manager` … `# <<< dsh-mcp-skill-manager`）追加/改写 `- insert: {id, name: '@deepseek-ai/dsh-mcp-client', config}` 行。
-- **项目级** → 写清单 `<目标文件夹>/.dsh/mcp-servers.yaml`，并生成专用预设 `~/.dsh/.agent-presets/<slug>-mcp/agent.cordis.yml`（以 shipped `standard` 为基底）。在会话预设选择器里选该预设即可生效。
+- **Global** → rows are appended/updated inside the managed region
+  (`# >>> dsh-extension-hub` … `# <<< dsh-extension-hub`) of
+  `~/.dsh/profiles/<profile>/cordis.patch.yml`.
+- **Project** → writes a manifest `<target folder>/.dsh/mcp-servers.yaml` and
+  generates a dedicated preset `~/.dsh/.agent-presets/<slug>-mcp/agent.cordis.yml`
+  (based on the shipped `standard` preset). Select that preset in the session
+  roster to activate the servers.
 
-## 目录结构
+## Repository layout
 
 ```
-mcp-skill-manager/
-  package.json        # 插件包元数据（dsh.client 声明、bin、exports）
-  cli.mjs             # CLI 入口
+dsh-extension-hub/
+  package.json        # plugin metadata (dsh.client, bin, exports)
+  cli.mjs             # CLI entry
   lib/
-    paths.mjs         # DSH home / patch / presets / skill roots 解析
-    yaml.mjs          # YAML 子集解析
-    toml.mjs          # TOML 子集解析（Codex config.toml）
-    emit.mjs          # 最小 YAML 输出
-    region.mjs        # 受管区域文本编辑
-    discover.mjs      # Claude / Codex 检索
-    convert.mjs       # Claude/Codex -> DSH 格式转换
-    install.mjs       # 写盘（skills / patch / project preset）
-    list.mjs          # 列出 DSH skills + MCP
-    skills.mjs        # 技能创建/读取/更新（frontmatter + body）
-    mcp.mjs           # MCP 行 upsert / get / remove / toggle
-    state.mjs         # 管理器状态（记住项目文件夹等）
-    host.js           # 插件宿主端：skillMcpManager Remote 网关
-    client.js         # 插件浏览器端：设置页"技能与 MCP"分区 UI
+    paths.mjs         # DSH home / patch / presets / skill roots resolution
+    yaml.mjs          # YAML subset parser
+    toml.mjs          # TOML subset parser (Codex config.toml)
+    emit.mjs          # minimal YAML emitter
+    region.mjs        # managed-region text editing
+    discover.mjs      # Claude / Codex discovery
+    convert.mjs       # Claude/Codex -> DSH conversion
+    install.mjs       # disk writes (skills / patch / project preset)
+    list.mjs          # list DSH skills + MCP
+    skills.mjs        # skill create / read / update (frontmatter + body)
+    mcp.mjs           # MCP row upsert / get / remove / toggle
+    state.mjs         # manager state (remembered project folder etc.)
+    host.js           # plugin host half: extensionHub Remote gateway
+    client.js         # plugin browser half: settings "Extension Management" UI
 ```
 
-## 已知边界
+## Known limitations
 
-- YAML/TOML 解析器是自带的**子集**实现，覆盖 DSH composition 与 Codex `config.toml` 的实际形态；遇到未覆盖写法会跳过或报错，不会静默破坏文件。
-- Skill 发现与 DSH `dsh-skill-filesystem` 一致：只识别 `<root>/<name>/SKILL.md` 与 `<root>/<name>.md`，`name` 必须 kebab-case。
-- 项目级 MCP 依赖"生成预设 + 手动选预设"机制；本工具不会替你在会话间自动切换预设。
-- 项目级 MCP 的启用/禁用开关作用于生成的预设（即"这个项目选了这个预设时是否加载该服务器"），清单文件始终保留全部记录。
-- 全局 MCP 的删除/编辑只影响本管理器添加的行（受管区域内）；手写进 patch 的行不受影响。
+- The YAML/TOML parsers are self-contained **subsets** covering the shapes
+  that actually appear in DSH compositions and Codex `config.toml`; anything
+  outside them is skipped or reported, never silently corrupted.
+- Skill discovery matches DSH `dsh-skill-filesystem`: only
+  `<root>/<name>/SKILL.md` and `<root>/<name>.md` are recognized; names must
+  be kebab-case.
+- Project MCP relies on the "generated preset + manually select the preset"
+  mechanism; the tool does not switch presets between sessions for you.
+- Project-scope enable/disable toggles apply to the generated preset (whether
+  the servers load when that preset is selected); the manifest always keeps
+  the full record.
+- Global MCP removal/editing only affects manager-managed rows (inside the
+  managed region); hand-written patch rows are untouched.
 
-## GitHub 发布
+## Publishing
 
-发布到 npm 前请确认：
+Before `npm publish`:
 
-1. `package.json` 的 `name` 未被占用（当前为 `dsh-extension-hub`），需要时改名并同步 `cordis.patch.yml` 中的 `name`；
-2. `node_modules/` 已被 `.gitignore` 排除（开发用 junction，不入库）；
-3. `npm publish` 前在本地用 `dsh plugin --profile web add <包名>` 从 registry 安装验证一次。
+1. Confirm the `name` (`dsh-extension-hub`) is still available on the registry;
+2. `node_modules/` is git-ignored (dev junction, never committed);
+3. Verify once from the registry on a clean profile:
+   `dsh plugin --profile web add dsh-extension-hub`.
+
+## License
+
+MIT

@@ -19,7 +19,9 @@
   "files": [
     "lib",
     "cli.mjs",
-    "README.md"
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
   ],
   "dsh": {
     "client": {
