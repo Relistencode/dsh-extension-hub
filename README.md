@@ -61,6 +61,7 @@ override, create a same-name skill in the user or project directory.
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.1.3: strict Typert descriptors (`./typert`) fix `/api/extensionHub/*` 404 in layouts where the protocol package loads twice; one-click update downloads the npm tarball directly (no pnpm).
 - **2026-08** — "Check Updates" button in the header: compares the local package version against the npm registry.
 - **2026-08** — Section renamed to **Extension Management** with a header ("Manage plugins, skills and MCP"); import moved from its own tab into the Skills and MCP Servers pages.
 - **2026-08** — Full zh/en i18n (83 keys), project folder picker, built-in skill read-only layer.
