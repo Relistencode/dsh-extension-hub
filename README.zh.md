@@ -57,6 +57,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.1.4：将 v0.1.3 更新说明同步进发布包（registry 同步发布）。
 - **2026-08** — v0.1.3：新增严格 Typert 描述符（`./typert`），修复协议包重复加载布局下 `/api/extensionHub/*` 404 的问题；一键更新直接下载 npm tarball（不依赖 pnpm）。
 - **2026-08** — 抬头新增"检查更新"按钮：对比本地版本与 npm registry 最新版。
 - **2026-08** — 分区更名为 **扩展管理** 并加抬头（"管理插件、技能和 MCP"）；导入从独立页签并入技能 / MCP 服务器页。
