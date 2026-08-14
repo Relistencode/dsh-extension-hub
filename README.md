@@ -37,7 +37,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 Restart `dsh web`, then open **Settings → Extension Management**.
 
-Install once — localization, update checks and everything else ship with version updates.
+Install once — the plugin keeps itself up to date automatically.
 
 ## Features
 
@@ -47,7 +47,7 @@ Install once — localization, update checks and everything else ship with versi
 | Create / edit / delete skills | ✅ | ✅ (form + Markdown body) |
 | Enable / disable skills & MCP | ✅ | ✅ |
 | Create / edit / delete MCP (stdio / streamable-http) | ✅ | ✅ |
-| Import skills & MCP from Claude / Codex | ✅ | ✅ |
+| Import skills & MCP from Claude / Codex and other tools | ✅ | ✅ |
 | Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
 
 **Built-in skills are read-only**: the list also shows skills bundled with the
@@ -118,29 +118,6 @@ frontmatter flags; removal deletes the file.
 DSH itself runs on Windows, macOS and Linux; this plugin has no platform
 specifics — the CLI works anywhere Node.js runs, and the settings UI follows
 the DSH Web host.
-
-## Repository layout
-
-```
-dsh-extension-hub/
-  package.json        # plugin metadata (dsh.client, bin, exports)
-  cli.mjs             # CLI entry
-  lib/
-    paths.mjs         # DSH home / patch / presets / skill roots resolution
-    yaml.mjs          # YAML subset parser
-    toml.mjs          # TOML subset parser (Codex config.toml)
-    emit.mjs          # minimal YAML emitter
-    region.mjs        # managed-region text editing
-    discover.mjs      # Claude / Codex discovery
-    convert.mjs       # Claude/Codex -> DSH conversion
-    install.mjs       # disk writes (skills / patch / project preset)
-    list.mjs          # list DSH skills + MCP
-    skills.mjs        # skill create / read / update (frontmatter + body)
-    mcp.mjs           # MCP row upsert / get / remove / toggle
-    state.mjs         # manager state (remembered project folder etc.)
-    host.js           # plugin host half: extensionHub Remote gateway
-    client.js         # plugin browser half: settings "Extension Management" UI
-```
 
 ## Known limitations
 

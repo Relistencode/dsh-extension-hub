@@ -37,7 +37,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 重启 `dsh web`，然后打开 **设置 → 扩展管理**。
 
-安装一次即可，中英双语、检查更新等能力随版本更新。
+安装一次即可，本插件可自动随版本更新。
 
 ## 主要功能
 
@@ -47,7 +47,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 | 新建 / 编辑 / 删除技能 | ✅ | ✅（表单 + Markdown 正文） |
 | 启用 / 禁用技能、MCP | ✅ | ✅ |
 | 新建 / 编辑 / 删除 MCP（stdio / streamable-http） | ✅ | ✅ |
-| 从 Claude / Codex 导入技能与 MCP | ✅ | ✅ |
+| 从 Claude / Codex 等其他工具导入技能与 MCP | ✅ | ✅ |
 | 项目级安装（选择目标文件夹） | ✅（`folder` 命令） | ✅（DSH 目录选择器） |
 
 **内置技能只读**：列表会一并显示 DSH 部署自带的技能（shipped presets，如 `cordis` 预设自带的技能）与用户预设目录中的技能，标记为"内置/预设"且不可编辑/删除/切换 —— 它们属于 deployment 或预设层；如需覆盖，在用户或项目目录新建同名技能即可。
@@ -96,29 +96,6 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 ## 支持平台
 
 DSH 本身支持 Windows、macOS 与 Linux；本插件无平台特殊性 —— CLI 在任意 Node.js 环境可用，设置页 UI 跟随 DSH Web 宿主。
-
-## 目录结构
-
-```
-dsh-extension-hub/
-  package.json        # 插件包元数据（dsh.client 声明、bin、exports）
-  cli.mjs             # CLI 入口
-  lib/
-    paths.mjs         # DSH home / patch / presets / skill roots 解析
-    yaml.mjs          # YAML 子集解析
-    toml.mjs          # TOML 子集解析（Codex config.toml）
-    emit.mjs          # 最小 YAML 输出
-    region.mjs        # 受管区域文本编辑
-    discover.mjs      # Claude / Codex 检索
-    convert.mjs       # Claude/Codex -> DSH 格式转换
-    install.mjs       # 写盘（skills / patch / project preset）
-    list.mjs          # 列出 DSH skills + MCP
-    skills.mjs        # 技能创建/读取/更新（frontmatter + body）
-    mcp.mjs           # MCP 行 upsert / get / remove / toggle
-    state.mjs         # 管理器状态（记住项目文件夹等）
-    host.js           # 插件宿主端：extensionHub Remote 网关
-    client.js         # 插件浏览器端：设置页"扩展管理"分区 UI
-```
 
 ## 已知限制
 
