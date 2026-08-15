@@ -31,7 +31,8 @@ window.__ModuleLoader__.load({
 			tag.dataset.pluginCss = CSS_ID;
 			tag.textContent = [
 				".myr-wrap{display:flex;flex-direction:column;gap:14px;min-height:0;color:var(--dsw-alias-label-primary,#1f2329);font-size:14px;line-height:22px;padding:2px 0;max-width:760px}",
-				".myr-title{font-size:24px;font-weight:700;line-height:32px;margin-bottom:10px}",
+				".myr-title{font-size:18px;font-weight:700;line-height:26px;margin-bottom:4px}",
+				".myr-sub{color:var(--dsw-alias-label-tertiary,#8f959e);font-size:12px;line-height:18px;margin-bottom:10px}",
 				".myr-divider{height:1px;background:var(--dsw-alias-divider,#e5e6eb);border:none;margin:0}",
 				".myr-block{display:flex;flex-direction:column;gap:8px}",
 				".myr-block-head{display:flex;align-items:center;gap:10px}",
@@ -39,22 +40,26 @@ window.__ModuleLoader__.load({
 				".myr-link{color:var(--dsw-alias-label-tertiary,#8f959e);font-size:13px;line-height:20px;text-decoration:none;cursor:pointer}",
 				".myr-link:hover{color:var(--dsw-alias-accent,#3370ff)}",
 				".myr-hint{color:var(--dsw-alias-label-tertiary,#8f959e);font-size:13px;line-height:20px}",
-				".myr-textarea{width:100%;box-sizing:border-box;min-height:380px;padding:10px 12px;border:1px solid var(--dsw-alias-border,#d9dce1);border-radius:8px;background:var(--dsw-alias-bg-module-platform,#f7f8fa);color:var(--dsw-alias-label-primary,#1f2329);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:20px;resize:vertical;outline:none}",
+				".myr-textarea{width:100%;box-sizing:border-box;height:190px;min-height:80px;padding:10px 12px;border:1px solid var(--dsw-alias-border,#d9dce1);border-radius:8px;background:var(--dsw-alias-bg-module-platform,#f7f8fa);color:var(--dsw-alias-label-primary,#1f2329);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:20px;resize:vertical;outline:none}",
 				".myr-textarea:focus{border-color:var(--dsw-alias-accent,#3370ff)}",
 				".myr-note{padding:0;border-radius:0;background:none;color:var(--dsw-alias-label-tertiary,#8f959e);font-size:12px;line-height:18px}",
 				".myr-footer{display:flex;align-items:center;gap:12px}",
 				".myr-meter{flex:1;display:flex;align-items:center;gap:10px;min-width:0}",
-				".myr-meter-track{flex:1;height:6px;border-radius:3px;background:transparent;border:1px solid var(--dsw-alias-divider,#e5e6eb);overflow:hidden;min-width:60px}",
-				".myr-meter-fill{height:100%;background:#fff;border-radius:3px;transition:width .2s ease}",
+				".myr-meter-track{flex:1;height:6px;border-radius:3px;background:transparent;border:1px solid var(--dsw-alias-label-tertiary,#8f959e);overflow:hidden;min-width:60px}",
+				".myr-meter-fill{height:100%;background:var(--dsw-alias-label-primary,#1f2329);border-radius:3px;transition:width .2s ease}",
 				".myr-meter-text{font-size:12px;color:var(--dsw-alias-label-tertiary,#8f959e);white-space:nowrap}",
 				".myr-msg{flex:1;font-size:13px;line-height:20px}",
 				".myr-ok{color:#12965b}",
 				".myr-warn{color:#d48806}",
 				".myr-err{color:#d54941}",
-				".myr-btn{cursor:pointer;border:none;border-radius:8px;padding:6px 16px;font-family:inherit;font-size:14px;line-height:22px;color:#fff;background:var(--dsw-alias-accent,#3370ff)}",
-				".myr-btn:hover{opacity:.9}",
+				".myr-btn{cursor:pointer;border:1px solid var(--dsw-alias-label-tertiary,#8f959e);border-radius:999px;padding:2px 14px;font-family:inherit;font-size:13px;line-height:20px;color:var(--dsw-alias-bg-layer-2,#fff);background:var(--dsw-alias-label-primary,#1f2329)}",
+				".myr-btn:hover{opacity:.85}",
 				".myr-btn:disabled{opacity:.5;cursor:not-allowed}",
 			].join("");
+			// The style tag must actually be inserted into the DOM — without
+			// appendChild the CSS never applies (i18n still works, which makes
+			// this failure mode look like "text changed but styles did not").
+			document.head.appendChild(tag);
 		}
 
 		// ── i18n ────────────────────────────────────────────────────────────────
@@ -74,7 +79,7 @@ window.__ModuleLoader__.load({
 			"meter": "{pct}% / 预算 {budget} KB",
 			"saved": "已保存 — 新会话立即生效。",
 			"savedWarn": "已保存（内容超过 64 KB 预算，超出部分可能被指令渲染器省略）。",
-			"removed": "已清除全局指令（原内容已备份到 {backup}）。",
+			"removed": "已清除全局指令。",
 			"saveFailed": "保存失败: ",
 			"confirmRemove": "内容为空 — 保存将删除全局指令文件（$DSH_HOME/AGENTS.md），所有会话将不再加载你的自定义指令。确定删除吗？",
 			"loading": "加载中…",
@@ -96,7 +101,7 @@ window.__ModuleLoader__.load({
 			"meter": "{pct}% / budget {budget} KB",
 			"saved": "Saved — new sessions apply immediately.",
 			"savedWarn": "Saved (content exceeds the 64 KB budget; overflow may be omitted by the instruction renderer).",
-			"removed": "Global instructions removed (previous content backed up to {backup}).",
+			"removed": "Global instructions removed.",
 			"saveFailed": "Save failed: ",
 			"confirmRemove": "The content is empty — saving will delete the global instructions file ($DSH_HOME/AGENTS.md) and your custom instructions will no longer load in any session. Delete?",
 			"loading": "Loading…",
@@ -233,7 +238,7 @@ window.__ModuleLoader__.load({
 				setMsg(null);
 				call("writeGlobalRules", { content: content }).then(function (r) {
 					if (r && r.ok) {
-						if (r.removed) setMsg({ kind: "ok", text: t("removed", { backup: meta ? meta.displayPath + ".bak" : "AGENTS.md.bak" }) });
+						if (r.removed) setMsg({ kind: "ok", text: t("removed") });
 						else if (r.warning) setMsg({ kind: "warn", text: t("savedWarn") });
 						else setMsg({ kind: "ok", text: t("saved") });
 						if (meta) setMeta(Object.assign({}, meta, { exists: !r.removed, bytes: r.bytes || 0 }));
@@ -247,12 +252,12 @@ window.__ModuleLoader__.load({
 
 			return h("div", { className: "myr-wrap" },
 				h("div", { className: "myr-title" }, t("title")),
+				h("div", { className: "myr-sub" }, t("hint")),
 				h("div", { className: "myr-divider" }),
 				h("div", { className: "myr-block" },
 					h("div", { className: "myr-block-head" },
 						h("span", { className: "myr-block-title" }, t("blockTitle")),
 						h("a", { href: DOC_URL, target: "_blank", rel: "noopener noreferrer", className: "myr-link" }, t("learnMore") + " ↗")),
-					h("div", { className: "myr-hint" }, t("hint")),
 					loading
 						? h("div", { className: "myr-hint" }, t("loading"))
 						: h("textarea", {

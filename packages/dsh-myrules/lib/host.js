@@ -5,9 +5,9 @@
 // ($DSH_HOME/AGENTS.md). That file is consumed by DSH's built-in
 // dsh-agent-instructions plugin and injected into every session on this host
 // as a durable user-role instruction block — so editing it here customizes
-// every chat. Writes are safe: an existing file is rolled to AGENTS.md.bak
-// first, an empty save removes the file (after backing it up), and content
-// beyond the agent-instructions budget (64 KiB) is still written but flagged.
+// every chat. An empty save removes the file (clearing the instructions);
+// content beyond the agent-instructions budget (64 KiB) is still written but
+// flagged.
 //
 // Remote methods are registered with markRemote() instead of the @Remote
 // decorator (plain-JS compatibility: the runtime does not parse decorators).
@@ -84,9 +84,9 @@ class MyRulesGateway extends TypertRemoteService {
   }
 
   // Save the global instruction file. `content` must be a string. Empty
-  // content removes the file (after backing it up). Existing files are
-  // rolled to AGENTS.md.bak before overwrite. Content beyond the 64 KiB
-  // instruction budget is written anyway and flagged with `warning`.
+  // content removes the file (clearing the instructions); non-empty content
+  // overwrites it. Content beyond the 64 KiB instruction budget is written
+  // anyway and flagged with `warning`.
   writeGlobalRules(input) {
     input = input || {}
     if (typeof input.content !== 'string') {
@@ -97,14 +97,8 @@ class MyRulesGateway extends TypertRemoteService {
     }
     const dshHome = resolveDshHome(input.dshHome)
     const file = globalInstructionsPath(dshHome)
-    const backup = `${file}.bak`
-    let backedUp = false
     let removed = false
     try {
-      if (fs.existsSync(file)) {
-        fs.copyFileSync(file, backup)
-        backedUp = true
-      }
       if (input.content.trim() === '') {
         if (fs.existsSync(file)) fs.rmSync(file)
         removed = true
@@ -122,7 +116,6 @@ class MyRulesGateway extends TypertRemoteService {
     const bytes = Buffer.byteLength(input.content, 'utf8')
     return jsonSafe({
       ok: true,
-      backedUp,
       removed,
       bytes,
       warning: bytes > INSTRUCTION_BUDGET_BYTES,

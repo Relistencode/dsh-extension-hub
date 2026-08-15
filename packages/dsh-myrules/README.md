@@ -23,10 +23,9 @@ Restart `dsh web`, then open **Settings → Customize**.
 2. Edit your custom instructions (Markdown, one or many lines)
 3. Click **Save**
 
-Saving is safe:
+Saving is straightforward:
 
-- an existing file is rolled to `AGENTS.md.bak` before overwrite
-- an **empty** save deletes the file (after backing it up) — confirm first
+- an **empty** save deletes the file (clearing the instructions) — confirm first
 - content beyond the 64 KB instruction budget is saved with a warning (the
   renderer omits broader files before truncating the most specific one)
 
