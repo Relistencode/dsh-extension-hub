@@ -235,6 +235,21 @@ the DSH Web host.
   day. Plugins that need a build step at install time fall back to a GitHub
   clone instead of the npm tarball path.
 
+## Integrate with Extension Hub
+
+DSH Extension Hub can integrate most plugins, letting users manage and keep
+every related feature updated in one place. If you are interested, your plugin
+is very welcome here too — together we can grow the DSH plugin ecosystem. Once
+integrated, your plugin appears in the Add-ons block of the Plugin Management
+tab, where users can install, disable, uninstall, and update it together with
+the main plugin.
+
+Thank you for your open-source contribution to the DSH community!
+
+Open an issue or reach out directly:
+[Open an issue](https://github.com/Relistencode/dsh-extension-hub/issues) ·
+Relistencode <1405650786@qq.com>
+
 ## Acknowledgments
 
 This project builds on the open work of the DSH community. Thanks to:
