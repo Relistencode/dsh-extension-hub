@@ -157,6 +157,15 @@ DSH 本身支持 Windows、macOS 与 Linux；本插件无平台特殊性 —— 
 - 项目级 MCP 的启用/禁用开关作用于生成的预设（即"这个项目选了这个预设时是否加载该服务器"），清单文件始终保留全部记录。
 - 全局 MCP 的删除/编辑只影响本管理器添加的行（受管区域内）；手写进 patch 的行不受影响。
 
+## 致谢
+
+v0.2.3 的精选目录与安装管线建立在 DSH 社区成果之上，特此感谢：
+
+- **[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)** —— 社区精选插件注册表，**精选目录**视图的数据源（每日刷新的 `plugins.json`、双语描述、npm 映射）。
+- **[dsh-market](https://github.com/dsh-market/dsh-market)** —— DSH 内置插件市场，示范了 npm 优先安装与 registry-对-仓库的防抢注校验。
+- **[dsh-plugins-store](https://github.com/ZASENJC/dsh-plugins-store)** —— 静态插件市场，其目录/验证思路启发了发现页数据源设计。
+- **[dshfind](https://github.com/hikariming/dshfind)** —— DSH 学习站与插件浏览器，其评分/分级展示启发了质量信号的想法。
+
 ## 许可证
 
 MIT

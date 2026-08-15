@@ -232,6 +232,24 @@ the DSH Web host.
 - Global MCP removal/editing only affects manager-managed rows (inside the
   managed region); hand-written patch rows are untouched.
 
+## Acknowledgments
+
+The curated store and install pipeline in v0.2.3 build on work by the DSH
+community. Thanks to:
+
+- **[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)**
+  — the community-curated plugin registry that powers the **Curated** view
+  (daily-refreshed `plugins.json`, bilingual descriptions, npm mappings).
+- **[dsh-market](https://github.com/dsh-market/dsh-market)** — the in-harness
+  plugin market that demonstrated npm-first installs and registry-vs-repo
+  anti-squatting checks.
+- **[dsh-plugins-store](https://github.com/ZASENJC/dsh-plugins-store)** — the
+  static plugin marketplace whose catalog/verification approach informed the
+  Discover data-source design.
+- **[dshfind](https://github.com/hikariming/dshfind)** — the DSH learning site
+  and plugin browser whose score/grade presentation inspired quality-signal
+  ideas.
+
 ## License
 
 MIT
