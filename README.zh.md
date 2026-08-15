@@ -54,7 +54,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 | 插件管理（官方/其他分组，启用/停用/卸载） | — | ✅ |
 | 插件市场（精选目录 npm 安装 + GitHub 搜索） | — | ✅ |
 | 检查并更新第三方插件 | — | ✅ |
-| [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.zh.md) — 设置页编辑此主机全局指令（个性化页） | — | ✅ |
+| [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.zh.md) — 设置页编辑此主机全局指令（个性化页）；可在插件管理中搜索「dsh-myrules」停用/卸载 | — | ✅ |
 
 **内置技能只读**：列表会一并显示 DSH 部署自带的技能（shipped presets，如 `cordis` 预设自带的技能）与用户预设目录中的技能，标记为"内置/预设"且不可编辑/删除/切换 —— 它们属于 deployment 或预设层；如需覆盖，在用户或项目目录新建同名技能即可。
 

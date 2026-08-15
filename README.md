@@ -60,7 +60,7 @@ Install once — use the header's **Check Updates** button to upgrade later.
 | Manage plugins (official vs other, enable / disable / uninstall) | — | ✅ |
 | Plugin Market: curated store (npm install) + GitHub search | — | ✅ |
 | Check & update third-party plugins | — | ✅ |
-| [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.md) — edit host-wide global instructions (Customize page) | — | ✅ |
+| [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.md) — edit host-wide global instructions (Customize page); search "dsh-myrules" in the plugin manager to disable or uninstall it | — | ✅ |
 
 **Built-in skills are read-only**: the list also shows skills bundled with the
 deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
