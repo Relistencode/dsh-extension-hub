@@ -31,7 +31,7 @@ window.__ModuleLoader__.load({
 			tag.dataset.pluginCss = CSS_ID;
 			tag.textContent = [
 				".myr-wrap{display:flex;flex-direction:column;gap:14px;min-height:0;color:var(--dsw-alias-label-primary,#1f2329);font-size:14px;line-height:22px;padding:2px 0;max-width:760px}",
-				".myr-title{font-size:20px;font-weight:600;line-height:28px}",
+				".myr-title{font-size:24px;font-weight:700;line-height:32px;margin-bottom:10px}",
 				".myr-divider{height:1px;background:var(--dsw-alias-divider,#e5e6eb);border:none;margin:0}",
 				".myr-block{display:flex;flex-direction:column;gap:8px}",
 				".myr-block-head{display:flex;align-items:center;gap:10px}",
@@ -39,10 +39,14 @@ window.__ModuleLoader__.load({
 				".myr-link{color:var(--dsw-alias-label-tertiary,#8f959e);font-size:13px;line-height:20px;text-decoration:none;cursor:pointer}",
 				".myr-link:hover{color:var(--dsw-alias-accent,#3370ff)}",
 				".myr-hint{color:var(--dsw-alias-label-tertiary,#8f959e);font-size:13px;line-height:20px}",
-				".myr-textarea{width:100%;box-sizing:border-box;min-height:180px;padding:10px 12px;border:1px solid var(--dsw-alias-border,#d9dce1);border-radius:8px;background:var(--dsw-alias-bg-module-platform,#f7f8fa);color:var(--dsw-alias-label-primary,#1f2329);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:20px;resize:vertical;outline:none}",
+				".myr-textarea{width:100%;box-sizing:border-box;min-height:380px;padding:10px 12px;border:1px solid var(--dsw-alias-border,#d9dce1);border-radius:8px;background:var(--dsw-alias-bg-module-platform,#f7f8fa);color:var(--dsw-alias-label-primary,#1f2329);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:20px;resize:vertical;outline:none}",
 				".myr-textarea:focus{border-color:var(--dsw-alias-accent,#3370ff)}",
-				".myr-note{padding:8px 10px;border-radius:8px;background:var(--dsw-alias-interactive-bg-active,rgba(0,0,0,.04));color:var(--dsw-alias-label-secondary,#646a73);font-size:13px;line-height:20px}",
-				".myr-footer{display:flex;align-items:center;gap:10px}",
+				".myr-note{padding:0;border-radius:0;background:none;color:var(--dsw-alias-label-tertiary,#8f959e);font-size:12px;line-height:18px}",
+				".myr-footer{display:flex;align-items:center;gap:12px}",
+				".myr-meter{flex:1;display:flex;align-items:center;gap:10px;min-width:0}",
+				".myr-meter-track{flex:1;height:6px;border-radius:3px;background:transparent;border:1px solid var(--dsw-alias-divider,#e5e6eb);overflow:hidden;min-width:60px}",
+				".myr-meter-fill{height:100%;background:#fff;border-radius:3px;transition:width .2s ease}",
+				".myr-meter-text{font-size:12px;color:var(--dsw-alias-label-tertiary,#8f959e);white-space:nowrap}",
 				".myr-msg{flex:1;font-size:13px;line-height:20px}",
 				".myr-ok{color:#12965b}",
 				".myr-warn{color:#d48806}",
@@ -67,6 +71,7 @@ window.__ModuleLoader__.load({
 			"saving": "保存中…",
 			"bytes": "{n} 字节",
 			"budget": "预算 {budget} KB",
+			"meter": "{pct}% / 预算 {budget} KB",
 			"saved": "已保存 — 新会话立即生效。",
 			"savedWarn": "已保存（内容超过 64 KB 预算，超出部分可能被指令渲染器省略）。",
 			"removed": "已清除全局指令（原内容已备份到 {backup}）。",
@@ -88,6 +93,7 @@ window.__ModuleLoader__.load({
 			"saving": "Saving…",
 			"bytes": "{n} bytes",
 			"budget": "budget {budget} KB",
+			"meter": "{pct}% / budget {budget} KB",
 			"saved": "Saved — new sessions apply immediately.",
 			"savedWarn": "Saved (content exceeds the 64 KB budget; overflow may be omitted by the instruction renderer).",
 			"removed": "Global instructions removed (previous content backed up to {backup}).",
@@ -213,7 +219,10 @@ window.__ModuleLoader__.load({
 			var byteCount = (function () {
 				try { return new TextEncoder().encode(content).length; } catch (e) { return content.length; }
 			})();
-			var budgetKb = meta ? Math.round(meta.budget / 1024) : 64;
+			var budgetBytes = meta ? meta.budget : 65536;
+			var budgetKb = Math.round(budgetBytes / 1024);
+			var pct = budgetBytes > 0 ? Math.round((byteCount / budgetBytes) * 100) : 0;
+			var fillPct = Math.min(pct, 100);
 
 			var save = function () {
 				if (busy) return;
@@ -253,10 +262,14 @@ window.__ModuleLoader__.load({
 							spellCheck: false,
 							onChange: function (e) { setContent(e.target.value); },
 						}),
+					h("div", { className: "myr-divider" }),
 					meta ? h("div", { className: "myr-note" }, t("editorNote", { path: meta.displayPath })) : null,
 					msg ? h("div", { className: "myr-msg myr-" + msg.kind }, msg.text) : null,
 					h("div", { className: "myr-footer" },
-						h("span", { className: "myr-hint" }, t("bytes", { n: String(byteCount) }) + " / " + t("budget", { budget: String(budgetKb) })),
+						h("div", { className: "myr-meter" },
+							h("div", { className: "myr-meter-track" },
+								h("div", { className: "myr-meter-fill", style: { width: fillPct + "%" } })),
+							h("span", { className: "myr-meter-text" }, t("meter", { pct: String(pct), budget: String(budgetKb) }))),
 						h("button", { type: "button", className: "myr-btn", disabled: busy || loading, onClick: save }, busy ? t("saving") : t("save")))));
 		}
 
