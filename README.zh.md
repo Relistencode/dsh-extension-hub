@@ -59,7 +59,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 ## 插件管理指南
 
-**扩展管理**页自 v0.2.0 起内置完整插件管理器，共四个页签：**技能 / MCP 服务器 / 插件管理 / 发现插件**。
+**扩展管理**页自 v0.2.0 起内置完整插件管理器，共五个页签：**技能 / MCP 服务器 / 插件管理 / 精选目录 / 发现插件**。
 
 ![插件预览](docs/screenshots/plugins-overview.png)
 
@@ -81,13 +81,16 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 ### 发现并安装新插件
 
-**发现插件**页搜索 GitHub 上打了 `dsh-plugin` 标签的仓库（可用关键字缩小范围）。每个结果展示星数，已安装的仓库会带"已安装"徽标。
+两个页签帮你找插件：
 
-点击仓库进入详情页——描述、星数、语言、最后更新与仓库链接——然后点 **安装**。Extension Hub 会：
+- **精选目录**（v0.2.3 新增）— 社区精选目录（[awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json)，每日刷新），11 个分类、双语描述、星数与排序（精选/最热/最新）。带 npm 映射的条目**从 npm 安装**（registry tarball，秒级完成，并校验包指向所选仓库以防名称抢占）；没有 npm 映射的条目回退为 GitHub 克隆。本地 24 小时缓存让该页离线可用。
+- **发现插件** — 搜索 GitHub 上打了 `dsh-plugin` 标签的仓库（可用关键字缩小范围）。每个结果展示星数，已安装的仓库会带"已安装"徽标。
 
-1. 浅克隆仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`
-2. 校验它带有可用的 `package.json` 入口
-3. 在 profile `cordis.patch.yml` 注册为本地路径插件行
+点击条目进入详情页——描述、星数、分类（精选）、安装方式与仓库链接——然后点 **安装**。Extension Hub 会：
+
+1. **优先走 npm registry**（插件发布到 npm 时）：下载 tarball 到 profile 的 `node_modules`，全程不依赖 pnpm（无需符号链接/权限），并注册 bundle 行。
+2. 否则**浅克隆**仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`，并校验它带有可用的 `package.json` 入口。
+3. 在 profile `cordis.patch.yml` 注册插件（托管 insert 块）并自检写入。
 
 重启 `dsh web` 后，插件出现在**其他插件**分组里，可以停用、卸载（同时删除克隆目录），并用 **检查更新** 保持最新（本地 git 克隆通过 `git pull` 更新）。
 
@@ -100,6 +103,8 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.3：**新增精选目录页签 + npm 安装路径** — 新的**精选目录**页签浏览社区目录（awesome-dsh-plugin，11 个分类、双语描述、精选/最热/最新排序、24 小时离线缓存）；带 npm 映射的插件改为从 npm registry 以 tarball 安装（无需 pnpm，带防抢注的仓库校验），GitHub 克隆作为回退；修复：补丁持久化语义——0.2.2 的平铺行写入对 patch 文件是错的（裸顶层 `- id:` 行会被当作 "override" 而静默失效；行必须包在 `- insert:` 里）。所有 patch 写入回退到托管 insert 块区域；profile patch 已重建为正确格式，重启后插件加载恢复正常。
+- **2026-08** — v0.2.2：统一平铺行 patch 持久化（CLI 与 UI 写入同一 loader 兼容格式）；MCP 列表读取合并行（region 与平铺格式）；`@` 前缀名的标量引号修复；卸载会删除发现页安装的克隆目录。
 - **2026-08** — v0.2.1：发现插件分页（"加载更多"，每页 30）、插件详情改为弹窗、真实的"已安装"标记（按配置行校验，而非仅看克隆目录）、安装写入自检、横向溢出修复。
 - **2026-08** — v0.2.0：完整插件管理器——官方/第三方分组（按厂商 scope）、组合加载器核心保护、带确认的启用/停用/卸载、逐个插件检查与更新（npm registry + 本地 git 克隆，支持全部更新）、以及基于 GitHub 的**发现插件**页（一键克隆安装 `dsh-plugin` 仓库）。
 - **2026-08** — v0.1.4：将 v0.1.3 更新说明同步进发布包（registry 同步发布）。

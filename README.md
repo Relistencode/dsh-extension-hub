@@ -76,7 +76,7 @@ override, create a same-name skill in the user or project directory.
 ## Plugin Management Guide
 
 The **Extension Management** page ships a full plugin manager since v0.2.0,
-with four tabs: **Skills / MCP Servers / Plugins / Discover**.
+with five tabs: **Skills / MCP Servers / Plugins / Curated / Discover**.
 
 ![Extension Hub overview](docs/screenshots/feature-overview.png)
 
@@ -111,16 +111,31 @@ label — click it to pull the new version (npm tarball or `git pull`), or use
 
 ### Discovering & installing new plugins
 
-The **Discover** tab searches GitHub for repositories tagged `dsh-plugin` (a
-free-text query narrows the search). Each result shows stars and an
-"Installed" badge when the repo is already present locally.
+Two tabs help you find plugins:
 
-Click a repository to open its detail page — description, stars, language, last
-update and a link to the repository — then hit **Install**. Extension Hub:
+- **Curated** (new in v0.2.3) — a community-curated catalog
+  ([awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json), refreshed
+  daily) with 11 categories, bilingual descriptions, star counts and ordering
+  (Featured / Top / Newest). Entries with an npm mapping install **from npm** in
+  seconds (registry tarball, with an anti-squatting check that the package
+  points back at the listed repository); entries without one fall back to a
+  GitHub clone. A 24h local cache keeps the tab usable offline.
+- **Discover** — searches GitHub for repositories tagged `dsh-plugin` (a
+  free-text query narrows the search). Each result shows stars and an
+  "Installed" badge when the repo is already present locally.
 
-1. Clones the repository (shallow) into `~/.dsh/extension-hub/plugins/<repo>`
-2. Verifies it ships a usable `package.json` entry
-3. Registers it in your profile `cordis.patch.yml` as a local-path plugin row
+Click a curated/discovered entry to open its detail page — description, stars,
+category (curated), install method and a link to the repository — then hit
+**Install**. Extension Hub:
+
+1. Prefers the **npm registry** when the plugin publishes to npm: downloads the
+   tarball into the profile `node_modules` without pnpm (no symlink/permission
+   requirements) and registers a bundle row.
+2. Otherwise **clones** the repository (shallow) into
+   `~/.dsh/extension-hub/plugins/<repo>` and verifies it ships a usable
+   `package.json` entry.
+3. Registers the plugin in your profile `cordis.patch.yml` (managed insert
+   block) and self-checks the write.
 
 After a `dsh web` restart the plugin appears in the **Other Plugins** group,
 where you can disable or uninstall it (which also removes the clone) and keep
@@ -137,7 +152,7 @@ it updated with **Check Updates** (local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
-- **2026-08** — v0.2.3: **fix: patch persistence semantics** — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
+- **2026-08** — v0.2.3: **Curated store tab + npm install path** — a new **Curated** tab browses the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; fix: patch persistence semantics — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
 - **2026-08** — v0.2.2: unified flat-row patch persistence (CLI and UI write the same loader-compatible format); MCP list reads merged rows (region and flat formats); scalar quoting fix for `@`-prefixed names; uninstall removes discover-installed clone directories.
 - **2026-08** — v0.2.1: Discover tab pagination ("Load more", 30 per page), plugin detail as a modal popup, truthful "Installed" badges (verified against the config row, not just the clone dir), install write-back verification, horizontal-overflow fixes.
 - **2026-08** — v0.2.0: full plugin manager — official vs third-party grouping (vendor-scope based), core protection for the composition loader, enable / disable / uninstall with confirmations, per-plugin check & update (npm registry + local git clones, Update All), and a GitHub-powered **Discover** tab that clones and installs `dsh-plugin` repositories in one click.
