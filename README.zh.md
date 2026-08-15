@@ -59,7 +59,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 ## 插件管理指南
 
-**扩展管理**页自 v0.2.0 起内置完整插件管理器，共四个页签：**技能 / MCP 服务器 / 插件管理 / 发现插件**。
+**扩展管理**页自 v0.2.0 起内置完整插件管理器，共四个页签：**技能 / MCP 服务器 / 插件管理 / 插件市场**。
 
 ![插件预览](docs/screenshots/plugins-overview.png)
 
@@ -81,10 +81,10 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 ### 发现并安装新插件
 
-**发现插件**页内有两个子视图：
+**插件市场**页内有两个子视图：
 
 - **精选目录**（默认，v0.2.3 新增）— 社区精选目录（[awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json)，每日刷新），11 个分类、双语描述、星数与排序（精选/最热/最新）。带 npm 映射的条目**从 npm 安装**（registry tarball，秒级完成，并校验包指向所选仓库以防名称抢占）；没有 npm 映射的条目回退为 GitHub 克隆。本地 24 小时缓存让该视图离线可用。
-- **GitHub 搜索** — 搜索 GitHub 上打了 `dsh-plugin` 标签的仓库（可用关键字缩小范围）。每个结果展示星数，已安装的仓库会带"已安装"徽标。
+- **发现更多** — 搜索 GitHub 上打了 `dsh-plugin` 标签的仓库（可用关键字缩小范围）。每个结果展示星数，已安装的仓库会带"已安装"徽标。
 
 点击条目进入详情页——描述、星数、分类（精选）、安装方式与仓库链接——然后点 **安装**。Extension Hub 会：
 
