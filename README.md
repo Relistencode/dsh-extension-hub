@@ -76,7 +76,7 @@ override, create a same-name skill in the user or project directory.
 ## Plugin Management Guide
 
 The **Extension Management** page ships a full plugin manager since v0.2.0,
-with five tabs: **Skills / MCP Servers / Plugins / Curated / Discover**.
+with four tabs: **Skills / MCP Servers / Plugins / Discover**.
 
 ![Extension Hub overview](docs/screenshots/feature-overview.png)
 
@@ -111,16 +111,16 @@ label — click it to pull the new version (npm tarball or `git pull`), or use
 
 ### Discovering & installing new plugins
 
-Two tabs help you find plugins:
+The **Discover** tab has two sub-views:
 
-- **Curated** (new in v0.2.3) — a community-curated catalog
+- **Curated** (default, new in v0.2.3) — a community-curated catalog
   ([awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json), refreshed
   daily) with 11 categories, bilingual descriptions, star counts and ordering
   (Featured / Top / Newest). Entries with an npm mapping install **from npm** in
   seconds (registry tarball, with an anti-squatting check that the package
   points back at the listed repository); entries without one fall back to a
-  GitHub clone. A 24h local cache keeps the tab usable offline.
-- **Discover** — searches GitHub for repositories tagged `dsh-plugin` (a
+  GitHub clone. A 24h local cache keeps the view usable offline.
+- **GitHub Search** — searches GitHub for repositories tagged `dsh-plugin` (a
   free-text query narrows the search). Each result shows stars and an
   "Installed" badge when the repo is already present locally.
 
