@@ -61,7 +61,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 **扩展管理**页自 v0.2.0 起内置完整插件管理器，共四个页签：**技能 / MCP 服务器 / 插件管理 / 发现插件**。
 
-![扩展管理总览](docs/screenshots/feature-overview.png)
+![插件预览](docs/screenshots/plugins-overview.png)
 
 ### 管理已安装的插件
 
@@ -77,7 +77,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 **其他插件**分组标题右侧有 **检查更新**：npm 包对比 registry、本地 git 克隆对比远端 HEAD。可更新的插件会在状态标签左侧出现绿色 **可更新** 按钮——点击拉取新版本（npm tarball 或 `git pull`），或用 **全部更新** 一键更新所有可更新插件。
 
-![管理你的插件](docs/screenshots/manage-plugins.png)
+![管理已安装的插件](docs/screenshots/manage-installed-plugins.png)
 
 ### 发现并安装新插件
 
@@ -91,7 +91,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 重启 `dsh web` 后，插件出现在**其他插件**分组里，可以停用、卸载（同时删除克隆目录），并用 **检查更新** 保持最新（本地 git 克隆通过 `git pull` 更新）。
 
-![在线安装新插件](docs/screenshots/install-plugins.png)
+![发现并安装新插件](docs/screenshots/discover-install-plugins.png)
 
 > 安装意味着运行第三方代码。请只安装你信任的仓库，并先看仓库自己的 README 安装说明——打了 `dsh-plugin` 标签的仓库也可能是技能、MCP 服务器，或需要自定义安装方式。
 
