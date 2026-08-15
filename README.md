@@ -1,5 +1,10 @@
 # dsh-extension-hub
 
+> **New in v0.2.7** — the **Add-ons** block now also carries
+> [dsh-recall](https://github.com/Relistencode/dsh-recall): conversation
+> history recall for DSH — literal/fuzzy/semantic retrieval over every past
+> session, fully local & offline.
+>
 > **New in v0.2.6** — A curated plugin store inside DSH: browse 400+
 > community-curated plugins (11 categories, bilingual descriptions), install
 > from npm in seconds with anti-squatting checks, search every GitHub
@@ -152,6 +157,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.7: new add-on **dsh-recall** — conversation history recall for DSH (three-layer literal/fuzzy/semantic retrieval over every past session, fully local & offline); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.6: new **Add-ons** block in the Plugin Management tab — install / disable / enable / uninstall companion features (dsh-myrules) without leaving the page; the header **Check Updates** now checks the main plugin AND installed add-ons together and updates everything at once; collapsible block; feature i18n keys aligned with their ids; "Integrate with Extension Hub" invitation section added to both READMEs.
 - **2026-08** — v0.2.5: new companion plugin **dsh-myrules** (`packages/dsh-myrules`) — a **Customize (个性化)** page in Settings that edits the host-wide global instructions (`$DSH_HOME/AGENTS.md`, injected into every session, new sessions apply immediately); theme-inverted primary buttons across the plugin manager, slim save button, percentage budget meter; rolling `.bak` backup removed.
 - **2026-08** — v0.2.4: **Plugin Market with a Curated store + npm install path** — the Plugin Market tab now leads with a **Curated** view of the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache) beside **Discover More** (GitHub search); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; settings tab renamed to **Plugin Market**; curated view no longer hangs on load (client-side method registration); quoted (`@scope`) row ids match in installed detection and uninstall; README overhaul with new screenshots.

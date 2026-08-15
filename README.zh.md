@@ -1,5 +1,7 @@
 # dsh-extension-hub
 
+> **v0.2.7 新功能** — **附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)：对话历史回忆——字面/模糊/语义三层检索全部历史会话，完全本地离线，让 AI 再也不会忘记你说过的话。
+>
 > **v0.2.6 新功能** — 新增**精选目录**：社区精选 400+ 插件、11 个分类、双语描述，npm 秒装（带防抢注校验）；「发现更多」可搜索全部 GitHub dsh 插件。另有 [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.zh.md) —— 在设置页编辑此主机全局指令的姊妹插件；插件管理页新增**附加功能**区，可一键安装、停用、卸载附属功能，并随主插件一起检查更新。
 
 一站式管理 DeepSeek Harness（DSH）的 Skills 与 MCP 服务器。
@@ -105,6 +107,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.7：**附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)——对话历史回忆（字面/模糊/语义三层检索全部历史会话，完全本地离线）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.6：插件管理页新增**附加功能**管理区——不离开页面即可安装/停用/启用/卸载附属功能（dsh-myrules）；头部**检查更新**改为主插件与已装附加功能一起检查、一键全部更新；附加功能区支持折叠；功能 i18n 键与 id 对齐；两个 README 新增「集成与合作」邀请段落。
 - **2026-08** — v0.2.5：新增姊妹插件 **dsh-myrules**（`packages/dsh-myrules`）——设置页新增**个性化**页，编辑此主机全局指令（`$DSH_HOME/AGENTS.md`，注入所有会话，新会话立即生效）；插件管理器的主操作按钮改为主题反转配色，保存按钮变扁，新增百分比预算进度条；移除滚动备份机制。
 - **2026-08** — v0.2.4：**插件市场 + 精选目录 + npm 安装路径** — 插件市场页新增**精选目录**视图（默认，awesome-dsh-plugin 社区目录，11 个分类、双语描述、精选/最热/最新排序、24 小时离线缓存），与**发现更多**（GitHub 搜索）并列；带 npm 映射的插件改为从 npm registry 以 tarball 安装（无需 pnpm，带防抢注的仓库校验），GitHub 克隆作为回退；设置页页签更名为**插件市场**；修复精选目录加载卡死（client 侧方法注册）；带引号的（`@scope`）行 id 在已安装判定与卸载中正确匹配；README 大改并更换截图。
