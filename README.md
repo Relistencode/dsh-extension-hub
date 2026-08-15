@@ -1,6 +1,6 @@
 # dsh-extension-hub
 
-> **New in v0.2.3** — A curated plugin store inside DSH: browse 400+
+> **New in v0.2.4** — A curated plugin store inside DSH: browse 400+
 > community-curated plugins (11 categories, bilingual descriptions), install
 > from npm in seconds with anti-squatting checks, search every GitHub
 > `dsh-plugin` repo — and keep them updated.
@@ -145,7 +145,8 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
-- **2026-08** — v0.2.3: **Plugin Market with a Curated store + npm install path** — the Plugin Market tab now leads with a **Curated** view of the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache) beside **Discover More** (GitHub search); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; fix: patch persistence semantics — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
+- **2026-08** — v0.2.4: **Plugin Market with a Curated store + npm install path** — the Plugin Market tab now leads with a **Curated** view of the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache) beside **Discover More** (GitHub search); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; settings tab renamed to **Plugin Market**; curated view no longer hangs on load (client-side method registration); quoted (`@scope`) row ids match in installed detection and uninstall; README overhaul with new screenshots.
+- **2026-08** — v0.2.3: fix: patch persistence semantics — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
 - **2026-08** — v0.2.2: unified flat-row patch persistence (CLI and UI write the same loader-compatible format); MCP list reads merged rows (region and flat formats); scalar quoting fix for `@`-prefixed names; uninstall removes discover-installed clone directories.
 - **2026-08** — v0.2.1: Discover tab pagination ("Load more", 30 per page), plugin detail as a modal popup, truthful "Installed" badges (verified against the config row, not just the clone dir), install write-back verification, horizontal-overflow fixes.
 - **2026-08** — v0.2.0: full plugin manager — official vs third-party grouping (vendor-scope based), core protection for the composition loader, enable / disable / uninstall with confirmations, per-plugin check & update (npm registry + local git clones, Update All), and a GitHub-powered **Discover** tab that clones and installs `dsh-plugin` repositories in one click.
