@@ -1,15 +1,15 @@
 # dsh-extension-hub
 
-> **New in v0.2.0** — Now you can manage your plugins properly. Extension Hub
-> manages **official and third-party plugins**, lets you enable them as you see
-> fit, **install open-source third-party plugins directly inside DSH**, and
-> **keep them updated** at any time.
+> **New in v0.2.3** — A curated plugin store inside DSH: browse 400+
+> community-curated plugins (11 categories, bilingual descriptions), install
+> from npm in seconds with anti-squatting checks, search every GitHub
+> `dsh-plugin` repo — and keep them updated.
 
 Manage DeepSeek Harness (DSH) skills and MCP servers from one place.
 
-Skills management · MCP servers · Skill import · Plugin management
+Skills management · MCP servers · Skill import · Plugin management · Plugin market
 
-A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, one-click import from Claude Code and OpenAI Codex, and a full plugin manager (official vs third-party, enable / disable / uninstall, check & update, and a GitHub-powered plugin discover & install page).
+A service-oriented extension center for DeepSeek Harness: a zero-dependency persistence core and CLI, plus a durable settings-page UI embedded in DSH Web — create / edit / enable / disable skills and MCP servers, one-click import from Claude Code and OpenAI Codex, and a full plugin manager (official vs third-party, enable / disable / uninstall, check & update, plus a Plugin Market with a curated store and GitHub search).
 
 🌏 [中文](README.zh.md) · English
 
@@ -42,7 +42,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 Restart `dsh web`, then open **Settings → Extension Management**.
 
-Install once — the plugin keeps itself up to date automatically.
+Install once — use the header's **Check Updates** button to upgrade later.
 
 ## Features
 
@@ -54,17 +54,8 @@ Install once — the plugin keeps itself up to date automatically.
 | Create / edit / delete MCP (stdio / streamable-http) | ✅ | ✅ |
 | Import skills & MCP from Claude / Codex and other tools | ✅ | ✅ |
 | Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
-
-**Built-in skills are read-only**: the list also shows skills bundled with the
-deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
-shipped inside user presets, marked "Built-in/Preset" and not editable /
-deletable / toggleable — they belong to the deployment or preset layer. To
-override, create a same-name skill in the user or project directory.
-
-| Import skills & MCP from Claude / Codex and other tools | ✅ | ✅ |
-| Project-scope install with folder picker | ✅ (`folder` cmd) | ✅ (DSH directory picker) |
 | Manage plugins (official vs other, enable / disable / uninstall) | — | ✅ |
-| Discover & install GitHub `dsh-plugin` repositories | — | ✅ |
+| Plugin Market: curated store (npm install) + GitHub search | — | ✅ |
 | Check & update third-party plugins | — | ✅ |
 
 **Built-in skills are read-only**: the list also shows skills bundled with the
@@ -99,7 +90,8 @@ id and module name. From the detail block you can:
   may cause serious problems.
 - **Uninstall** (non-official only) — removes the plugin row from the
   configuration, with a warning plus a second "Confirm uninstall?" step. If the
-  plugin was installed through the Discover tab, its local clone is deleted too.
+  plugin was installed via a GitHub clone, its local clone directory is deleted
+  too.
 
 The **Other Plugins** group header has **Check Updates**: it compares npm
 packages against the registry and local git clones against their origin HEAD.
@@ -113,7 +105,7 @@ label — click it to pull the new version (npm tarball or `git pull`), or use
 
 The **Plugin Market** tab has two sub-views:
 
-- **Curated** (default, new in v0.2.3) — a community-curated catalog
+- **Curated** (default) — a community-curated catalog
   ([awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json), refreshed
   daily) with 11 categories, bilingual descriptions, star counts and ordering
   (Featured / Top / Newest). Entries with an npm mapping install **from npm** in
@@ -138,8 +130,9 @@ category (curated), install method and a link to the repository — then hit
    block) and self-checks the write.
 
 After a `dsh web` restart the plugin appears in the **Other Plugins** group,
-where you can disable or uninstall it (which also removes the clone) and keep
-it updated with **Check Updates** (local git clones update via `git pull`).
+where you can disable or uninstall it (GitHub-clone installs also remove the
+clone directory) and keep it updated with **Check Updates** (npm packages
+check the registry; local git clones update via `git pull`).
 
 ![Installing plugins online](docs/screenshots/install-plugins.png)
 
@@ -152,7 +145,7 @@ it updated with **Check Updates** (local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
-- **2026-08** — v0.2.3: **Curated store tab + npm install path** — a new **Curated** tab browses the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; fix: patch persistence semantics — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
+- **2026-08** — v0.2.3: **Plugin Market with a Curated store + npm install path** — the Plugin Market tab now leads with a **Curated** view of the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache) beside **Discover More** (GitHub search); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; fix: patch persistence semantics — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
 - **2026-08** — v0.2.2: unified flat-row patch persistence (CLI and UI write the same loader-compatible format); MCP list reads merged rows (region and flat formats); scalar quoting fix for `@`-prefixed names; uninstall removes discover-installed clone directories.
 - **2026-08** — v0.2.1: Discover tab pagination ("Load more", 30 per page), plugin detail as a modal popup, truthful "Installed" badges (verified against the config row, not just the clone dir), install write-back verification, horizontal-overflow fixes.
 - **2026-08** — v0.2.0: full plugin manager — official vs third-party grouping (vendor-scope based), core protection for the composition loader, enable / disable / uninstall with confirmations, per-plugin check & update (npm registry + local git clones, Update All), and a GitHub-powered **Discover** tab that clones and installs `dsh-plugin` repositories in one click.
@@ -231,11 +224,14 @@ the DSH Web host.
   the full record.
 - Global MCP removal/editing only affects manager-managed rows (inside the
   managed region); hand-written patch rows are untouched.
+- The curated store is a snapshot of the community registry: it refreshes on
+  load with a 24h local cache, so it may trail the live registry by up to a
+  day. Plugins that need a build step at install time fall back to a GitHub
+  clone instead of the npm tarball path.
 
 ## Acknowledgments
 
-The curated store and install pipeline in v0.2.3 build on work by the DSH
-community. Thanks to:
+This project builds on the open work of the DSH community. Thanks to:
 
 - **[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)**
   — the community-curated plugin registry that powers the **Curated** view

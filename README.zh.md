@@ -1,12 +1,12 @@
 # dsh-extension-hub
 
-> **v0.2.0 新功能** — 现在你可以更好地管理自己的插件了。Extension Hub 帮你管理**官方/第三方插件**，你可以视情况启用，并且能够在 DSH 里**直接安装开源的第三方插件**，以及**随时更新**它们！
+> **v0.2.3 新功能** — 新增**精选目录**：社区精选 400+ 插件、11 个分类、双语描述，npm 秒装（带防抢注校验）；「发现更多」可搜索全部 GitHub dsh 插件。
 
 一站式管理 DeepSeek Harness（DSH）的 Skills 与 MCP 服务器。
 
-技能管理 · MCP 服务器 · 技能导入 · 插件管理
+技能管理 · MCP 服务器 · 技能导入 · 插件管理 · 插件市场
 
-一个服务化的 DSH 扩展中心：零依赖的持久层与 CLI，加上嵌进 DSH Web 设置页的持久化管理界面——新建 / 编辑 / 启用 / 停用技能与 MCP 服务器、从 Claude Code 与 OpenAI Codex 一键导入，以及完整的插件管理器（官方/第三方分组、启用 / 停用 / 卸载、检查与更新，外加基于 GitHub 的插件发现与安装页）。
+一个服务化的 DSH 扩展中心：零依赖的持久层与 CLI，加上嵌进 DSH Web 设置页的持久化管理界面——新建 / 编辑 / 启用 / 停用技能与 MCP 服务器、从 Claude Code 与 OpenAI Codex 一键导入，以及完整的插件管理器（官方/第三方分组、启用 / 停用 / 卸载、检查与更新，外加**插件市场**：精选目录 + npm 秒装 + GitHub 发现）。
 
 🌏 中文 · [English](README.md)
 
@@ -39,7 +39,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 重启 `dsh web`，然后打开 **设置 → 扩展管理**。
 
-安装一次即可，本插件可自动随版本更新。
+安装一次即可，之后可通过顶部「检查更新」按钮升级。
 
 ## 主要功能
 
@@ -52,7 +52,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 | 从 Claude / Codex 等其他工具导入技能与 MCP | ✅ | ✅ |
 | 项目级安装（选择目标文件夹） | ✅（`folder` 命令） | ✅（DSH 目录选择器） |
 | 插件管理（官方/其他分组，启用/停用/卸载） | — | ✅ |
-| 发现并安装 GitHub `dsh-plugin` 仓库 | — | ✅ |
+| 插件市场（精选目录 npm 安装 + GitHub 搜索） | — | ✅ |
 | 检查并更新第三方插件 | — | ✅ |
 
 **内置技能只读**：列表会一并显示 DSH 部署自带的技能（shipped presets，如 `cordis` 预设自带的技能）与用户预设目录中的技能，标记为"内置/预设"且不可编辑/删除/切换 —— 它们属于 deployment 或预设层；如需覆盖，在用户或项目目录新建同名技能即可。
@@ -73,7 +73,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 点击插件查看详情：描述、来源、仓库链接、条目 ID 与模块名。详情里可以：
 
 - **启用 / 停用** — 写入你的 profile `cordis.patch.yml`，重启 `dsh web` 后生效。停用前会警告：不清楚功能的插件可能带来未知的严重问题。
-- **卸载**（仅非官方插件）— 从配置中移除该插件行，先警告、再二次确认"确认卸载？"。若插件是通过"发现插件"安装的，其本地克隆目录会一并删除。
+- **卸载**（仅非官方插件）— 从配置中移除该插件行，先警告、再二次确认"确认卸载？"。若插件是通过 GitHub 克隆安装的，其本地克隆目录会一并删除。
 
 **其他插件**分组标题右侧有 **检查更新**：npm 包对比 registry、本地 git 克隆对比远端 HEAD。可更新的插件会在状态标签左侧出现绿色 **可更新** 按钮——点击拉取新版本（npm tarball 或 `git pull`），或用 **全部更新** 一键更新所有可更新插件。
 
@@ -83,7 +83,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 
 **插件市场**页内有两个子视图：
 
-- **精选目录**（默认，v0.2.3 新增）— 社区精选目录（[awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json)，每日刷新），11 个分类、双语描述、星数与排序（精选/最热/最新）。带 npm 映射的条目**从 npm 安装**（registry tarball，秒级完成，并校验包指向所选仓库以防名称抢占）；没有 npm 映射的条目回退为 GitHub 克隆。本地 24 小时缓存让该视图离线可用。
+- **精选目录**（默认）— 社区精选目录（[awesome-dsh-plugin](https://awesome-dsh-plugin.com/plugins.json)，每日刷新），11 个分类、双语描述、星数与排序（精选/最热/最新）。带 npm 映射的条目**从 npm 安装**（registry tarball，秒级完成，并校验包指向所选仓库以防名称抢占）；没有 npm 映射的条目回退为 GitHub 克隆。本地 24 小时缓存让该视图离线可用。
 - **发现更多** — 搜索 GitHub 上打了 `dsh-plugin` 标签的仓库（可用关键字缩小范围）。每个结果展示星数，已安装的仓库会带"已安装"徽标。
 
 点击条目进入详情页——描述、星数、分类（精选）、安装方式与仓库链接——然后点 **安装**。Extension Hub 会：
@@ -92,7 +92,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 2. 否则**浅克隆**仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`，并校验它带有可用的 `package.json` 入口。
 3. 在 profile `cordis.patch.yml` 注册插件（托管 insert 块）并自检写入。
 
-重启 `dsh web` 后，插件出现在**其他插件**分组里，可以停用、卸载（同时删除克隆目录），并用 **检查更新** 保持最新（本地 git 克隆通过 `git pull` 更新）。
+重启 `dsh web` 后，插件出现在**其他插件**分组里，可以停用、卸载（GitHub 克隆安装的会同时删除克隆目录），并用 **检查更新** 保持最新（npm 包对比 registry，本地 git 克隆通过 `git pull` 更新）。
 
 ![发现并安装新插件](docs/screenshots/discover-install-plugins.png)
 
@@ -103,7 +103,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 <details>
 <summary>最近更新（点击展开）</summary>
 
-- **2026-08** — v0.2.3：**新增精选目录页签 + npm 安装路径** — 新的**精选目录**页签浏览社区目录（awesome-dsh-plugin，11 个分类、双语描述、精选/最热/最新排序、24 小时离线缓存）；带 npm 映射的插件改为从 npm registry 以 tarball 安装（无需 pnpm，带防抢注的仓库校验），GitHub 克隆作为回退；修复：补丁持久化语义——0.2.2 的平铺行写入对 patch 文件是错的（裸顶层 `- id:` 行会被当作 "override" 而静默失效；行必须包在 `- insert:` 里）。所有 patch 写入回退到托管 insert 块区域；profile patch 已重建为正确格式，重启后插件加载恢复正常。
+- **2026-08** — v0.2.3：**插件市场 + 精选目录 + npm 安装路径** — 插件市场页新增**精选目录**视图（默认，awesome-dsh-plugin 社区目录，11 个分类、双语描述、精选/最热/最新排序、24 小时离线缓存），与**发现更多**（GitHub 搜索）并列；带 npm 映射的插件改为从 npm registry 以 tarball 安装（无需 pnpm，带防抢注的仓库校验），GitHub 克隆作为回退；修复：补丁持久化语义——0.2.2 的平铺行写入对 patch 文件是错的（裸顶层 `- id:` 行会被当作 "override" 而静默失效；行必须包在 `- insert:` 里）。所有 patch 写入回退到托管 insert 块区域；profile patch 已重建为正确格式，重启后插件加载恢复正常。
 - **2026-08** — v0.2.2：统一平铺行 patch 持久化（CLI 与 UI 写入同一 loader 兼容格式）；MCP 列表读取合并行（region 与平铺格式）；`@` 前缀名的标量引号修复；卸载会删除发现页安装的克隆目录。
 - **2026-08** — v0.2.1：发现插件分页（"加载更多"，每页 30）、插件详情改为弹窗、真实的"已安装"标记（按配置行校验，而非仅看克隆目录）、安装写入自检、横向溢出修复。
 - **2026-08** — v0.2.0：完整插件管理器——官方/第三方分组（按厂商 scope）、组合加载器核心保护、带确认的启用/停用/卸载、逐个插件检查与更新（npm registry + 本地 git 克隆，支持全部更新）、以及基于 GitHub 的**发现插件**页（一键克隆安装 `dsh-plugin` 仓库）。
@@ -156,10 +156,11 @@ DSH 本身支持 Windows、macOS 与 Linux；本插件无平台特殊性 —— 
 - 项目级 MCP 依赖"生成预设 + 手动选预设"机制；本工具不会替你在会话间自动切换预设。
 - 项目级 MCP 的启用/禁用开关作用于生成的预设（即"这个项目选了这个预设时是否加载该服务器"），清单文件始终保留全部记录。
 - 全局 MCP 的删除/编辑只影响本管理器添加的行（受管区域内）；手写进 patch 的行不受影响。
+- 精选目录是社区注册表的快照：加载时刷新并带 24 小时本地缓存，最多可能滞后一天。需要在安装时执行构建步骤的插件会回退为 GitHub 克隆安装，不走 npm tarball 路径。
 
 ## 致谢
 
-v0.2.3 的精选目录与安装管线建立在 DSH 社区成果之上，特此感谢：
+本项目的完善建立在 DSH 社区的开源成果之上，特此感谢：
 
 - **[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)** —— 社区精选插件注册表，**精选目录**视图的数据源（每日刷新的 `plugins.json`、双语描述、npm 映射）。
 - **[dsh-market](https://github.com/dsh-market/dsh-market)** —— DSH 内置插件市场，示范了 npm 优先安装与 registry-对-仓库的防抢注校验。
