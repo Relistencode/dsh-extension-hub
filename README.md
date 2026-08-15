@@ -1,12 +1,14 @@
 # dsh-extension-hub
 
-> **New in v0.2.5** — A curated plugin store inside DSH: browse 400+
+> **New in v0.2.6** — A curated plugin store inside DSH: browse 400+
 > community-curated plugins (11 categories, bilingual descriptions), install
 > from npm in seconds with anti-squatting checks, search every GitHub
 > `dsh-plugin` repo — and keep them updated. Plus
 > [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.md)
 > — a companion plugin to edit your host-wide global instructions from the
-> settings page.
+> settings page. And a new **Add-ons** block in the Plugin Management tab:
+> install, disable, uninstall and update companion features together with the
+> main plugin.
 
 Manage DeepSeek Harness (DSH) skills and MCP servers from one place.
 
@@ -61,6 +63,7 @@ Install once — use the header's **Check Updates** button to upgrade later.
 | Plugin Market: curated store (npm install) + GitHub search | — | ✅ |
 | Check & update third-party plugins | — | ✅ |
 | [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.md) — edit host-wide global instructions (Customize page); search "dsh-myrules" in the plugin manager to disable or uninstall it | — | ✅ |
+| Add-on manager: install / disable / uninstall companion features, update together with the main plugin | — | ✅ |
 
 **Built-in skills are read-only**: the list also shows skills bundled with the
 deployment (shipped presets, e.g. the `cordis` preset's skills) and skills
@@ -149,6 +152,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.6: new **Add-ons** block in the Plugin Management tab — install / disable / enable / uninstall companion features (dsh-myrules) without leaving the page; the header **Check Updates** now checks the main plugin AND installed add-ons together and updates everything at once; collapsible block; feature i18n keys aligned with their ids; "Integrate with Extension Hub" invitation section added to both READMEs.
 - **2026-08** — v0.2.5: new companion plugin **dsh-myrules** (`packages/dsh-myrules`) — a **Customize (个性化)** page in Settings that edits the host-wide global instructions (`$DSH_HOME/AGENTS.md`, injected into every session, new sessions apply immediately); theme-inverted primary buttons across the plugin manager, slim save button, percentage budget meter; rolling `.bak` backup removed.
 - **2026-08** — v0.2.4: **Plugin Market with a Curated store + npm install path** — the Plugin Market tab now leads with a **Curated** view of the community catalog (awesome-dsh-plugin, 11 categories, bilingual descriptions, Featured/Top/Newest ordering, 24h offline cache) beside **Discover More** (GitHub search); plugins with an npm mapping now install from the npm registry via tarball (no pnpm, anti-squatting repo check) with GitHub clone as fallback; settings tab renamed to **Plugin Market**; curated view no longer hangs on load (client-side method registration); quoted (`@scope`) row ids match in installed detection and uninstall; README overhaul with new screenshots.
 - **2026-08** — v0.2.3: fix: patch persistence semantics — 0.2.2's flat-row writer was wrong for patch files (a bare top-level `- id:` row means "override" and silently no-ops; rows must be wrapped in `- insert:`). Reverted all patch writes to the managed insert-block region; the profile patch was rebuilt to the correct format. This restores plugin loading after restart.
