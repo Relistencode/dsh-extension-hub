@@ -1,5 +1,7 @@
 # dsh-extension-hub
 
+> **v0.2.9 修复** — **Windows GitHub 克隆安装崩溃**：克隆插件行改为注册 `file://` 模块名,不再写入原始盘符路径(Node ESM 加载器拒绝盘符路径,导致 `dsh web` 启动崩溃)。
+>
 > **v0.2.8 新功能** — **一键安装**：包新增组合补丁（bundle 层），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动接线插件行，快速开始不再需要手动编辑 `cordis.patch.yml`。
 >
 > **v0.2.7 新功能** — **附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)：对话历史回忆——字面/模糊/语义三层检索全部历史会话，完全本地离线，让 AI 再也不会忘记你说过的话。
@@ -90,6 +92,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.8
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.9：**修复 Windows GitHub 克隆安装崩溃** — 克隆插件行改为注册 `file://` 模块名,不再写入原始盘符路径(loader 用 Node ESM 加载 `name`,拒绝 `C:\...` 说明符导致 `dsh web` 启动崩溃);所有读取方(已安装徽标、卸载、更新、描述)都会把 URL 还原为本地路径。若已有损坏的克隆行导致启动崩溃,请手动编辑 `cordis.patch.yml`,把该行 `name` 改为 `file://` + 正斜杠绝对路径(如 `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo`)。
 - **2026-08** — v0.2.8：**一键安装** —— 包新增组合补丁（`cordis.patch.yml`），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动把插件行接入 profile；快速开始不再需要手动编辑 `cordis.patch.yml`。
 - **2026-08** — v0.2.7：**附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)——对话历史回忆（字面/模糊/语义三层检索全部历史会话，完全本地离线）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.6：插件管理页新增**附加功能**管理区——不离开页面即可安装/停用/启用/卸载附属功能（dsh-myrules）；头部**检查更新**改为主插件与已装附加功能一起检查、一键全部更新；附加功能区支持折叠；功能 i18n 键与 id 对齐；两个 README 新增「集成与合作」邀请段落。

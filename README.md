@@ -1,5 +1,9 @@
 # dsh-extension-hub
 
+> **New in v0.2.9** — **Windows fix for GitHub-clone installs**: clone rows
+> now register with a `file://` module name instead of a raw drive-letter
+> path, which the Node ESM loader rejects (crash on `dsh web` startup).
+>
 > **New in v0.2.8** — **one-command install**: the package now ships a
 > bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the
 > plugin row into your profile automatically (no more manual
@@ -143,6 +147,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.9: **Windows fix for GitHub-clone installs** — clone rows register with a `file://` module name instead of a raw drive-letter path (the loader imports `name` via Node ESM, which rejects `C:\...` specifiers and crashed `dsh web` on startup); all readers (installed badge, uninstall, update, description) convert the URL back to a path. If a broken clone row already crashed your startup, edit `cordis.patch.yml` and replace its `name` with `file://` + the forward-slash absolute path (e.g. `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo`).
 - **2026-08** — v0.2.8: **one-command install** — the package now ships a bundle patch (`cordis.patch.yml`), so `dsh plugin --profile web add dsh-extension-hub` wires the plugin row into your profile automatically; the quick start no longer requires manual `cordis.patch.yml` edits.
 - **2026-08** — v0.2.7: new add-on **dsh-recall** — conversation history recall for DSH (three-layer literal/fuzzy/semantic retrieval over every past session, fully local & offline); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.6: new **Add-ons** block in the Plugin Management tab — install / disable / enable / uninstall companion features (dsh-myrules) without leaving the page; the header **Check Updates** now checks the main plugin AND installed add-ons together and updates everything at once; collapsible block; feature i18n keys aligned with their ids; "Integrate with Extension Hub" invitation section added to both READMEs.
