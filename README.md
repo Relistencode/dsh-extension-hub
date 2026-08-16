@@ -33,7 +33,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.8
+dsh plugin --profile web add dsh-extension-hub@0.2.11
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
@@ -149,6 +149,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.11: docs — quick-start install command pinned to the current release (the published tarball had carried the v0.2.8 command).
 - **2026-08** — v0.2.10: **complete Windows fix for GitHub-clone installs** — clone rows now register a `file://` URL pointing at the clone's **entry file** (v0.2.9 pointed at the clone directory, which Node ESM still rejects with `ERR_UNSUPPORTED_DIR_IMPORT` and crashed `dsh web`); clone installs also refuse packages with npm runtime dependencies (there is no dependency-install step) and warn when a package relies on a bundle patch that a clone cannot apply. To repair a broken row by hand, edit `cordis.patch.yml` and point `name` at the entry file, e.g. `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo/lib/index.js`.
 - **2026-08** — v0.2.9: Windows GitHub-clone install fix (first pass) — clone rows switched from raw drive-letter paths to `file://` module names; superseded by v0.2.10 (entry-file URLs).
 - **2026-08** — v0.2.8: **one-command install** — the package now ships a bundle patch (`cordis.patch.yml`), so `dsh plugin --profile web add dsh-extension-hub` wires the plugin row into your profile automatically; the quick start no longer requires manual `cordis.patch.yml` edits.

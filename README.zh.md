@@ -19,7 +19,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.8
+dsh plugin --profile web add dsh-extension-hub@0.2.11
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
@@ -90,6 +90,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.8
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.11：文档 —— 快速开始安装命令更新到当前版本（此前发布的包内 README 仍带着 v0.2.8 的命令）。
 - **2026-08** — v0.2.10：**Windows GitHub 克隆安装崩溃完整修复** — 克隆插件行注册 `file://` URL 并指向克隆目录的**入口文件**(0.2.9 指向克隆目录,Node ESM 仍以 `ERR_UNSUPPORTED_DIR_IMPORT` 拒绝并导致 `dsh web` 崩溃);克隆安装同时拒绝带 npm 运行时依赖的包(克隆无依赖安装步骤),并对依赖 bundle 补丁(克隆无法应用)的包给出警告。若需手动修复损坏行,编辑 `cordis.patch.yml`,把该行 `name` 指向入口文件,如 `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo/lib/index.js`。
 - **2026-08** — v0.2.9：Windows GitHub 克隆安装修复(第一次)— 克隆行从原始盘符路径改为 `file://` 模块名;已被 v0.2.10 取代(入口文件 URL)。
 - **2026-08** — v0.2.8：**一键安装** —— 包新增组合补丁（`cordis.patch.yml`），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动把插件行接入 profile；快速开始不再需要手动编辑 `cordis.patch.yml`。
