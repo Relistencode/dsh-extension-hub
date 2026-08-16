@@ -1,5 +1,10 @@
 # dsh-extension-hub
 
+> **New in v0.2.8** — **one-command install**: the package now ships a
+> bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the
+> plugin row into your profile automatically (no more manual
+> `cordis.patch.yml` edits in the quick start).
+>
 > **New in v0.2.7** — the **Add-ons** block now also carries
 > [dsh-recall](https://github.com/Relistencode/dsh-recall): conversation
 > history recall for DSH — literal/fuzzy/semantic retrieval over every past
@@ -27,30 +32,11 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
-macOS / Linux (Windows with Git Bash or WSL works too):
-
-```bash
-cd ~/.dsh/profiles/web
-pnpm add dsh-extension-hub
-grep -q "name: dsh-extension-hub" cordis.patch.yml || cat >> cordis.patch.yml <<'EOF'
-
-- insert:
-    - id: extension-hub
-      name: dsh-extension-hub
-EOF
+```sh
+dsh plugin --profile web add dsh-extension-hub
 ```
 
-Windows (PowerShell 5.1+ / pwsh):
-
-```powershell
-cd "$env:USERPROFILE\.dsh\profiles\web"
-pnpm add dsh-extension-hub
-if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub' -Quiet)) {
-  Add-Content -Path cordis.patch.yml -Value "`n- insert:`n    - id: extension-hub`n      name: dsh-extension-hub"
-}
-```
-
-Restart `dsh web`, then open **Settings → Extension Management**.
+One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
 
 Install once — use the header's **Check Updates** button to upgrade later.
 
@@ -157,6 +143,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.8: **one-command install** — the package now ships a bundle patch (`cordis.patch.yml`), so `dsh plugin --profile web add dsh-extension-hub` wires the plugin row into your profile automatically; the quick start no longer requires manual `cordis.patch.yml` edits.
 - **2026-08** — v0.2.7: new add-on **dsh-recall** — conversation history recall for DSH (three-layer literal/fuzzy/semantic retrieval over every past session, fully local & offline); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.6: new **Add-ons** block in the Plugin Management tab — install / disable / enable / uninstall companion features (dsh-myrules) without leaving the page; the header **Check Updates** now checks the main plugin AND installed add-ons together and updates everything at once; collapsible block; feature i18n keys aligned with their ids; "Integrate with Extension Hub" invitation section added to both READMEs.
 - **2026-08** — v0.2.5: new companion plugin **dsh-myrules** (`packages/dsh-myrules`) — a **Customize (个性化)** page in Settings that edits the host-wide global instructions (`$DSH_HOME/AGENTS.md`, injected into every session, new sessions apply immediately); theme-inverted primary buttons across the plugin manager, slim save button, percentage budget meter; rolling `.bak` backup removed.

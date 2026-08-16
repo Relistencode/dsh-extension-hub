@@ -1,5 +1,7 @@
 # dsh-extension-hub
 
+> **v0.2.8 新功能** — **一键安装**：包新增组合补丁（bundle 层），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动接线插件行，快速开始不再需要手动编辑 `cordis.patch.yml`。
+>
 > **v0.2.7 新功能** — **附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)：对话历史回忆——字面/模糊/语义三层检索全部历史会话，完全本地离线，让 AI 再也不会忘记你说过的话。
 >
 > **v0.2.6 新功能** — 新增**精选目录**：社区精选 400+ 插件、11 个分类、双语描述，npm 秒装（带防抢注校验）；「发现更多」可搜索全部 GitHub dsh 插件。另有 [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.zh.md) —— 在设置页编辑此主机全局指令的姊妹插件；插件管理页新增**附加功能**区，可一键安装、停用、卸载附属功能，并随主插件一起检查更新。
@@ -16,30 +18,11 @@
 
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
-macOS / Linux（Windows 装了 Git Bash 或 WSL 也可）：
-
-```bash
-cd ~/.dsh/profiles/web
-pnpm add dsh-extension-hub
-grep -q "name: dsh-extension-hub" cordis.patch.yml || cat >> cordis.patch.yml <<'EOF'
-
-- insert:
-    - id: extension-hub
-      name: dsh-extension-hub
-EOF
+```sh
+dsh plugin --profile web add dsh-extension-hub
 ```
 
-Windows（PowerShell 5.1+ / pwsh）：
-
-```powershell
-cd "$env:USERPROFILE\.dsh\profiles\web"
-pnpm add dsh-extension-hub
-if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub' -Quiet)) {
-  Add-Content -Path cordis.patch.yml -Value "`n- insert:`n    - id: extension-hub`n      name: dsh-extension-hub"
-}
-```
-
-重启 `dsh web`，然后打开 **设置 → 扩展管理**。
+一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
 
 安装一次即可，之后可通过顶部「检查更新」按钮升级。
 
@@ -107,6 +90,7 @@ if (-not (Select-String -Path cordis.patch.yml -Pattern 'name: dsh-extension-hub
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.8：**一键安装** —— 包新增组合补丁（`cordis.patch.yml`），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动把插件行接入 profile；快速开始不再需要手动编辑 `cordis.patch.yml`。
 - **2026-08** — v0.2.7：**附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)——对话历史回忆（字面/模糊/语义三层检索全部历史会话，完全本地离线）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.6：插件管理页新增**附加功能**管理区——不离开页面即可安装/停用/启用/卸载附属功能（dsh-myrules）；头部**检查更新**改为主插件与已装附加功能一起检查、一键全部更新；附加功能区支持折叠；功能 i18n 键与 id 对齐；两个 README 新增「集成与合作」邀请段落。
 - **2026-08** — v0.2.5：新增姊妹插件 **dsh-myrules**（`packages/dsh-myrules`）——设置页新增**个性化**页，编辑此主机全局指令（`$DSH_HOME/AGENTS.md`，注入所有会话，新会话立即生效）；插件管理器的主操作按钮改为主题反转配色，保存按钮变扁，新增百分比预算进度条；移除滚动备份机制。

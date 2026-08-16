@@ -1,0 +1,9 @@
+# dsh-extension-hub bundle patch — applied automatically when the package is
+# installed with `dsh plugin --profile <name> add dsh-extension-hub`.
+#
+# The user's own profile cordis.patch.yml is applied AFTER bundle layers and
+# wins per row, so every row here can still be overridden there.
+
+- insert:
+    - id: extension-hub
+      name: dsh-extension-hub
