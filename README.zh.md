@@ -1,7 +1,5 @@
 # dsh-extension-hub
 
-> **v0.2.9 修复** — **Windows GitHub 克隆安装崩溃**：克隆插件行改为注册 `file://` 模块名,不再写入原始盘符路径(Node ESM 加载器拒绝盘符路径,导致 `dsh web` 启动崩溃)。
->
 > **v0.2.8 新功能** — **一键安装**：包新增组合补丁（bundle 层），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动接线插件行，快速开始不再需要手动编辑 `cordis.patch.yml`。
 >
 > **v0.2.7 新功能** — **附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)：对话历史回忆——字面/模糊/语义三层检索全部历史会话，完全本地离线，让 AI 再也不会忘记你说过的话。
@@ -78,7 +76,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.8
 点击条目进入详情页——描述、星数、分类（精选）、安装方式与仓库链接——然后点 **安装**。Extension Hub 会：
 
 1. **优先走 npm registry**（插件发布到 npm 时）：下载 tarball 到 profile 的 `node_modules`，全程不依赖 pnpm（无需符号链接/权限），并注册 bundle 行。
-2. 否则**浅克隆**仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`，并校验它带有可用的 `package.json` 入口。
+2. 否则**浅克隆**仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`，并校验它带有可用的 `package.json` 入口。克隆安装仅支持**零依赖**插件：带 npm 运行时依赖的包会被拒绝（克隆没有依赖安装步骤），依赖 bundle 补丁（`dsh.bundle.patch`）的包会给出警告（克隆无法应用它）。另请注意：monorepo 根仓库（例如 dsh-myrules 的仓库就是本仓库）克隆后得到的是根包而非目标插件——这类插件请走 npm 或附加功能安装。
 3. 在 profile `cordis.patch.yml` 注册插件（托管 insert 块）并自检写入。
 
 重启 `dsh web` 后，插件出现在**其他插件**分组里，可以停用、卸载（GitHub 克隆安装的会同时删除克隆目录），并用 **检查更新** 保持最新（npm 包对比 registry，本地 git 克隆通过 `git pull` 更新）。
@@ -92,7 +90,8 @@ dsh plugin --profile web add dsh-extension-hub@0.2.8
 <details>
 <summary>最近更新（点击展开）</summary>
 
-- **2026-08** — v0.2.9：**修复 Windows GitHub 克隆安装崩溃** — 克隆插件行改为注册 `file://` 模块名,不再写入原始盘符路径(loader 用 Node ESM 加载 `name`,拒绝 `C:\...` 说明符导致 `dsh web` 启动崩溃);所有读取方(已安装徽标、卸载、更新、描述)都会把 URL 还原为本地路径。若已有损坏的克隆行导致启动崩溃,请手动编辑 `cordis.patch.yml`,把该行 `name` 改为 `file://` + 正斜杠绝对路径(如 `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo`)。
+- **2026-08** — v0.2.10：**Windows GitHub 克隆安装崩溃完整修复** — 克隆插件行注册 `file://` URL 并指向克隆目录的**入口文件**(0.2.9 指向克隆目录,Node ESM 仍以 `ERR_UNSUPPORTED_DIR_IMPORT` 拒绝并导致 `dsh web` 崩溃);克隆安装同时拒绝带 npm 运行时依赖的包(克隆无依赖安装步骤),并对依赖 bundle 补丁(克隆无法应用)的包给出警告。若需手动修复损坏行,编辑 `cordis.patch.yml`,把该行 `name` 指向入口文件,如 `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo/lib/index.js`。
+- **2026-08** — v0.2.9：Windows GitHub 克隆安装修复(第一次)— 克隆行从原始盘符路径改为 `file://` 模块名;已被 v0.2.10 取代(入口文件 URL)。
 - **2026-08** — v0.2.8：**一键安装** —— 包新增组合补丁（`cordis.patch.yml`），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动把插件行接入 profile；快速开始不再需要手动编辑 `cordis.patch.yml`。
 - **2026-08** — v0.2.7：**附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)——对话历史回忆（字面/模糊/语义三层检索全部历史会话，完全本地离线）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.6：插件管理页新增**附加功能**管理区——不离开页面即可安装/停用/启用/卸载附属功能（dsh-myrules）；头部**检查更新**改为主插件与已装附加功能一起检查、一键全部更新；附加功能区支持折叠；功能 i18n 键与 id 对齐；两个 README 新增「集成与合作」邀请段落。

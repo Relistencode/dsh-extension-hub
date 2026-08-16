@@ -1,9 +1,5 @@
 # dsh-extension-hub
 
-> **New in v0.2.9** — **Windows fix for GitHub-clone installs**: clone rows
-> now register with a `file://` module name instead of a raw drive-letter
-> path, which the Node ESM loader rejects (crash on `dsh web` startup).
->
 > **New in v0.2.8** — **one-command install**: the package now ships a
 > bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the
 > plugin row into your profile automatically (no more manual
@@ -127,7 +123,13 @@ category (curated), install method and a link to the repository — then hit
    requirements) and registers a bundle row.
 2. Otherwise **clones** the repository (shallow) into
    `~/.dsh/extension-hub/plugins/<repo>` and verifies it ships a usable
-   `package.json` entry.
+   `package.json` entry. Clone installs support **zero-dependency** plugins
+   only: packages with npm runtime dependencies are rejected (there is no
+   dependency-install step), and packages that rely on a bundle patch
+   (`dsh.bundle.patch`) are flagged because a clone cannot apply it. Be aware
+   that a monorepo root (e.g. the repo of `dsh-myrules` is this very
+   repository) clones as the root package, not the target plugin — use the npm
+   or Add-ons install path for those.
 3. Registers the plugin in your profile `cordis.patch.yml` (managed insert
    block) and self-checks the write.
 
@@ -147,7 +149,8 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
-- **2026-08** — v0.2.9: **Windows fix for GitHub-clone installs** — clone rows register with a `file://` module name instead of a raw drive-letter path (the loader imports `name` via Node ESM, which rejects `C:\...` specifiers and crashed `dsh web` on startup); all readers (installed badge, uninstall, update, description) convert the URL back to a path. If a broken clone row already crashed your startup, edit `cordis.patch.yml` and replace its `name` with `file://` + the forward-slash absolute path (e.g. `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo`).
+- **2026-08** — v0.2.10: **complete Windows fix for GitHub-clone installs** — clone rows now register a `file://` URL pointing at the clone's **entry file** (v0.2.9 pointed at the clone directory, which Node ESM still rejects with `ERR_UNSUPPORTED_DIR_IMPORT` and crashed `dsh web`); clone installs also refuse packages with npm runtime dependencies (there is no dependency-install step) and warn when a package relies on a bundle patch that a clone cannot apply. To repair a broken row by hand, edit `cordis.patch.yml` and point `name` at the entry file, e.g. `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo/lib/index.js`.
+- **2026-08** — v0.2.9: Windows GitHub-clone install fix (first pass) — clone rows switched from raw drive-letter paths to `file://` module names; superseded by v0.2.10 (entry-file URLs).
 - **2026-08** — v0.2.8: **one-command install** — the package now ships a bundle patch (`cordis.patch.yml`), so `dsh plugin --profile web add dsh-extension-hub` wires the plugin row into your profile automatically; the quick start no longer requires manual `cordis.patch.yml` edits.
 - **2026-08** — v0.2.7: new add-on **dsh-recall** — conversation history recall for DSH (three-layer literal/fuzzy/semantic retrieval over every past session, fully local & offline); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.6: new **Add-ons** block in the Plugin Management tab — install / disable / enable / uninstall companion features (dsh-myrules) without leaving the page; the header **Check Updates** now checks the main plugin AND installed add-ons together and updates everything at once; collapsible block; feature i18n keys aligned with their ids; "Integrate with Extension Hub" invitation section added to both READMEs.
