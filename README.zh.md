@@ -19,7 +19,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.11
+dsh plugin --profile web add dsh-extension-hub@0.2.12
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
@@ -75,7 +75,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.11
 
 点击条目进入详情页——描述、星数、分类（精选）、安装方式与仓库链接——然后点 **安装**。Extension Hub 会：
 
-1. **优先走 npm registry**（插件发布到 npm 时）：下载 tarball 到 profile 的 `node_modules`，全程不依赖 pnpm（无需符号链接/权限），并注册 bundle 行。
+1. **优先走 npm registry**（插件发布到 npm 时）：下载 tarball 到 profile 的 `node_modules`，全程不依赖 pnpm（无需符号链接/权限），并注册 bundle 行。此类插件由 Extension Hub 自行管理——之后请继续用其「检查更新」保持最新；依赖已写入 profile 清单，后续 `dsh plugin` / pnpm 重装不会丢失。
 2. 否则**浅克隆**仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`，并校验它带有可用的 `package.json` 入口。克隆安装仅支持**零依赖**插件：带 npm 运行时依赖的包会被拒绝（克隆没有依赖安装步骤），依赖 bundle 补丁（`dsh.bundle.patch`）的包会给出警告（克隆无法应用它）。另请注意：monorepo 根仓库（例如 dsh-myrules 的仓库就是本仓库）克隆后得到的是根包而非目标插件——这类插件请走 npm 或附加功能安装。
 3. 在 profile `cordis.patch.yml` 注册插件（托管 insert 块）并自检写入。
 
@@ -90,6 +90,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.11
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.12：**审查修复** — MCP 导入发现遵循 Claude/Codex 优先级（项目 `.mcp.json` > 项目 `.claude.json` > 用户配置；Codex 项目 > 全局）,不再反向覆盖;MCP 列表展示 Home 层行（`$DSH_HOME/cordis.patch.yml`，只读，带徽标）;组合配置与状态写入改为原子写（临时文件+rename，带锁重试）,崩溃不会损坏 `cordis.patch.yml`;克隆安装拒绝消息区分"无 package.json"与"缺少构建产物"（git 安装取源码非产物）;README 注明 npm 安装的插件由 Extension Hub 管理,后续 `dsh plugin`/pnpm 不会丢失。
 - **2026-08** — v0.2.11：文档 —— 快速开始安装命令更新到当前版本（此前发布的包内 README 仍带着 v0.2.8 的命令）。
 - **2026-08** — v0.2.10：**Windows GitHub 克隆安装崩溃完整修复** — 克隆插件行注册 `file://` URL 并指向克隆目录的**入口文件**(0.2.9 指向克隆目录,Node ESM 仍以 `ERR_UNSUPPORTED_DIR_IMPORT` 拒绝并导致 `dsh web` 崩溃);克隆安装同时拒绝带 npm 运行时依赖的包(克隆无依赖安装步骤),并对依赖 bundle 补丁(克隆无法应用)的包给出警告。若需手动修复损坏行,编辑 `cordis.patch.yml`,把该行 `name` 指向入口文件,如 `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo/lib/index.js`。
 - **2026-08** — v0.2.9：Windows GitHub 克隆安装修复(第一次)— 克隆行从原始盘符路径改为 `file://` 模块名;已被 v0.2.10 取代(入口文件 URL)。
