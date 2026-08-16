@@ -33,7 +33,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub
+dsh plugin --profile web add dsh-extension-hub@0.2.8
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.

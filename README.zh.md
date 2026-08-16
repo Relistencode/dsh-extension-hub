@@ -19,7 +19,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub
+dsh plugin --profile web add dsh-extension-hub@0.2.8
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。

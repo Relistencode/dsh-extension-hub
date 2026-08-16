@@ -7,7 +7,7 @@
 ## 安装
 
 ```sh
-dsh plugin --profile web add dsh-myrules
+dsh plugin --profile web add dsh-myrules@0.1.1
 ```
 
 重启 `dsh web`，然后打开 **设置 → 个性化**。

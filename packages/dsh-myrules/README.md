@@ -12,7 +12,7 @@ it up after its next file operation. No restart needed.
 ## Install
 
 ```sh
-dsh plugin --profile web add dsh-myrules
+dsh plugin --profile web add dsh-myrules@0.1.1
 ```
 
 Restart `dsh web`, then open **Settings → Customize**.
