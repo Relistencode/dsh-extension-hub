@@ -33,7 +33,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.12
+dsh plugin --profile web add dsh-extension-hub@0.2.13
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
@@ -152,6 +152,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.13: **fix (issue #2)** — `hostPatchPath()` no longer auto-probes the profiles directory (a scan could hit a headless profile before web and make the MCP list read/write the wrong composition); extension management is bound to the **web** profile, with an explicit profile name still supported.
 - **2026-08** — v0.2.12: **review fixes** — MCP discovery now follows Claude/Codex precedence (project `.mcp.json` > project `.claude.json` > user configs; Codex project > global) instead of the reversed order; the MCP list shows home-level rows (`$DSH_HOME/cordis.patch.yml`, read-only, badge-marked); composition and state writes are atomic (temp+rename, lock retries) so a crash cannot corrupt `cordis.patch.yml`; clone-install rejection messages distinguish a missing package.json from a missing build output (git installs fetch sources, not artifacts); README notes that npm-installed plugins stay managed by Extension Hub across later `dsh plugin`/pnpm runs.
 - **2026-08** — v0.2.11: docs — quick-start install command pinned to the current release (the published tarball had carried the v0.2.8 command).
 - **2026-08** — v0.2.10: **complete Windows fix for GitHub-clone installs** — clone rows now register a `file://` URL pointing at the clone's **entry file** (v0.2.9 pointed at the clone directory, which Node ESM still rejects with `ERR_UNSUPPORTED_DIR_IMPORT` and crashed `dsh web`); clone installs also refuse packages with npm runtime dependencies (there is no dependency-install step) and warn when a package relies on a bundle patch that a clone cannot apply. To repair a broken row by hand, edit `cordis.patch.yml` and point `name` at the entry file, e.g. `name: file:///C:/Users/you/.dsh/extension-hub/plugins/foo/lib/index.js`.
