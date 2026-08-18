@@ -24,7 +24,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.16
+dsh plugin --profile web add dsh-extension-hub@0.2.17
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
@@ -127,6 +127,16 @@ category (curated), install method and a link to the repository — then hit
 3. Registers the plugin in your profile `cordis.patch.yml` (managed insert
    block) and self-checks the write.
 
+> **Mixing install paths (Discussion #2889)**: Extension Hub installs write a
+> profile patch row plus a dependency declaration. Do **not** combine this
+> with the official `dsh plugin add/list/update` commands: DSH CLI appends
+> every dependency declaring a `dsh.bundle.patch` to `dsh.profile.bundles`,
+> duplicating the manual row and crashing `dsh web` on boot with
+> `duplicate loader entry id` (see
+> [deepseek-harness Discussion #2889](https://github.com/deepseek-ai/deepseek-harness/discussions/2889)).
+> If you already ran a `dsh plugin` command, remove the duplicated entries
+> from `dsh.profile.bundles` before restarting.
+
 After a `dsh web` restart the plugin appears in the **Other Plugins** group,
 where you can disable or uninstall it (GitHub-clone installs also remove the
 clone directory) and keep it updated with **Check Updates** (npm packages
@@ -143,6 +153,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.17: npm installs of bundle-patch add-ons now warn against mixing install paths — DSH CLI's bundle reconcile (`dsh plugin add/list/update`) appends every dependency declaring `dsh.bundle.patch` to `dsh.profile.bundles`, duplicating the manual row and crashing `dsh web` on boot (`duplicate loader entry id`, see [Discussion #2889](https://github.com/deepseek-ai/deepseek-harness/discussions/2889)); the README now carries the same guidance.
 - **2026-08** — v0.2.16: add-on installs now warn about missing runtime dependencies — the npm installer checks the downloaded package's dependencies against the profile and appends a reminder to the result message when any are absent (the install still completes; a profile-level `pnpm install` fixes loading after restart).
 - **2026-08** — v0.2.15: new add-on [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit) — a more powerful vision toolkit (paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.14: **fix: add-ons / installed badges now see the bundle layer** — a feature or plugin installed via the official `dsh plugin add` (bundle) path is detected as installed (its row lives in the bundle's own patch, not the profile patch), so the Add-ons block no longer offers a duplicate install that would crash `dsh web`; `installNpmPlugin` refuses packages already registered by a bundle layer; bundle-installed add-ons are uninstalled via `dsh plugin remove` (guided in the UI) instead of profile-patch deletion.

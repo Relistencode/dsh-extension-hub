@@ -24,7 +24,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.16
+dsh plugin --profile web add dsh-extension-hub@0.2.17
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
@@ -84,6 +84,8 @@ dsh plugin --profile web add dsh-extension-hub@0.2.16
 2. 否则**浅克隆**仓库到 `~/.dsh/extension-hub/plugins/<仓库名>`，并校验它带有可用的 `package.json` 入口。克隆安装仅支持**零依赖**插件：带 npm 运行时依赖的包会被拒绝（克隆没有依赖安装步骤），依赖 bundle 补丁（`dsh.bundle.patch`）的包会给出警告（克隆无法应用它）。另请注意：monorepo 根仓库（例如 dsh-myrules 的仓库就是本仓库）克隆后得到的是根包而非目标插件——这类插件请走 npm 或附加功能安装。
 3. 在 profile `cordis.patch.yml` 注册插件（托管 insert 块）并自检写入。
 
+> **安装路径混用警告（Discussion #2889）**：Extension Hub 的安装会写 profile patch 行并声明依赖。请**不要**再与官方 `dsh plugin add/list/update` 命令混用：DSH CLI 会把每个声明了 `dsh.bundle.patch` 的依赖追加进 `dsh.profile.bundles`，与手动注册行重复，导致 `dsh web` 启动崩溃（`duplicate loader entry id`，详见 [deepseek-harness Discussion #2889](https://github.com/deepseek-ai/deepseek-harness/discussions/2889)）。若已运行过 `dsh plugin` 命令，请在重启前从 `dsh.profile.bundles` 移除重复条目。
+
 重启 `dsh web` 后，插件出现在**其他插件**分组里，可以停用、卸载（GitHub 克隆安装的会同时删除克隆目录），并用 **检查更新** 保持最新（npm 包对比 registry，本地 git 克隆通过 `git pull` 更新）。
 
 ![发现并安装新插件](docs/screenshots/discover-install-plugins.png)
@@ -95,6 +97,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.16
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.17：带 bundle 补丁插件的 npm 安装增加**安装路径混用警告** — DSH CLI 的 bundle reconcile（`dsh plugin add/list/update`）会把每个声明了 `dsh.bundle.patch` 的依赖追加进 `dsh.profile.bundles`，与手动注册行重复，导致 `dsh web` 启动崩溃（`duplicate loader entry id`，见 [Discussion #2889](https://github.com/deepseek-ai/deepseek-harness/discussions/2889)）；README 同步补充该指引。
 - **2026-08** — v0.2.16：附加功能安装增加**缺依赖提醒** — npm 安装器对照 profile 检查所下载插件的运行时依赖,缺失时在安装结果消息中追加提醒（安装仍照常完成;重启后若加载失败,在 profile 目录执行 `pnpm install` 补齐）。
 - **2026-08** — v0.2.15：**附加功能**区新增 [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit)——更强大的视觉工具包（直接粘贴即可进行图片理解、UI 还原、长截图分析等视觉任务）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.14：**修复：附加功能/已安装徽标感知 bundle 层** — 通过官方 `dsh plugin add`（bundle 方式）安装的功能或插件现在会被识别为已安装（其注册行在 bundle 自己的 patch 里，不在 profile patch），附加功能区块不再提供会导致 `dsh web` 崩溃的重复安装;`installNpmPlugin` 拒绝已被 bundle 层注册的包;bundle 安装的附加功能通过 `dsh plugin remove` 卸载（UI 有引导）,不再误删 profile 行。
