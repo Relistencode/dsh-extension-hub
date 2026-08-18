@@ -1,5 +1,10 @@
 # dsh-extension-hub
 
+> **New in v0.2.15** — the **Add-ons** block now carries
+> [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit): a more
+> powerful vision toolkit — paste an image directly for image understanding,
+> UI restoration, long-screenshot analysis, and more visual tasks.
+>
 > **New in v0.2.8** — **one-command install**: the package now ships a
 > bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the
 > plugin row into your profile automatically (no more manual
@@ -33,7 +38,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.14
+dsh plugin --profile web add dsh-extension-hub@0.2.15
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
@@ -152,6 +157,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.15: new add-on [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit) — a more powerful vision toolkit (paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.14: **fix: add-ons / installed badges now see the bundle layer** — a feature or plugin installed via the official `dsh plugin add` (bundle) path is detected as installed (its row lives in the bundle's own patch, not the profile patch), so the Add-ons block no longer offers a duplicate install that would crash `dsh web`; `installNpmPlugin` refuses packages already registered by a bundle layer; bundle-installed add-ons are uninstalled via `dsh plugin remove` (guided in the UI) instead of profile-patch deletion.
 - **2026-08** — v0.2.13: **fix (issue #2)** — `hostPatchPath()` no longer auto-probes the profiles directory (a scan could hit a headless profile before web and make the MCP list read/write the wrong composition); extension management is bound to the **web** profile, with an explicit profile name still supported.
 - **2026-08** — v0.2.12: **review fixes** — MCP discovery now follows Claude/Codex precedence (project `.mcp.json` > project `.claude.json` > user configs; Codex project > global) instead of the reversed order; the MCP list shows home-level rows (`$DSH_HOME/cordis.patch.yml`, read-only, badge-marked); composition and state writes are atomic (temp+rename, lock retries) so a crash cannot corrupt `cordis.patch.yml`; clone-install rejection messages distinguish a missing package.json from a missing build output (git installs fetch sources, not artifacts); README notes that npm-installed plugins stay managed by Extension Hub across later `dsh plugin`/pnpm runs.

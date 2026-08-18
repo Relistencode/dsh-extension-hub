@@ -1,6 +1,6 @@
 {
   "name": "dsh-extension-hub",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "Extension Hub for DeepSeek Harness (DSH): manage skills, MCP servers and plugins from the DSH Web settings page — list / create / edit / delete / enable-disable, import from Claude and Codex, manage official & third-party plugins, a Plugin Market with a curated store (npm one-click install) and GitHub discovery, and keep them updated. Ships a durable dual-face Cordis plugin (host gateway + browser settings section) and a dependency-free CLI.",
   "type": "module",
   "main": "lib/host.js",
