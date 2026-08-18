@@ -21,7 +21,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.15
+dsh plugin --profile web add dsh-extension-hub@0.2.16
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
@@ -92,6 +92,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.15
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.16：附加功能安装增加**缺依赖提醒** — npm 安装器对照 profile 检查所下载插件的运行时依赖,缺失时在安装结果消息中追加提醒（安装仍照常完成;重启后若加载失败,在 profile 目录执行 `pnpm install` 补齐）。
 - **2026-08** — v0.2.15：**附加功能**区新增 [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit)——更强大的视觉工具包（直接粘贴即可进行图片理解、UI 还原、长截图分析等视觉任务）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.14：**修复：附加功能/已安装徽标感知 bundle 层** — 通过官方 `dsh plugin add`（bundle 方式）安装的功能或插件现在会被识别为已安装（其注册行在 bundle 自己的 patch 里，不在 profile patch），附加功能区块不再提供会导致 `dsh web` 崩溃的重复安装;`installNpmPlugin` 拒绝已被 bundle 层注册的包;bundle 安装的附加功能通过 `dsh plugin remove` 卸载（UI 有引导）,不再误删 profile 行。
 - **2026-08** — v0.2.13：**修复（issue #2）** — `hostPatchPath()` 不再自动探测 profiles 目录（扫描可能先命中 headless,导致 MCP 列表读写错位的组合配置）；扩展管理固定绑定 **web** profile,显式指定 profile 仍受支持。

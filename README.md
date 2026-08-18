@@ -38,7 +38,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.15
+dsh plugin --profile web add dsh-extension-hub@0.2.16
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
@@ -157,6 +157,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.16: add-on installs now warn about missing runtime dependencies — the npm installer checks the downloaded package's dependencies against the profile and appends a reminder to the result message when any are absent (the install still completes; a profile-level `pnpm install` fixes loading after restart).
 - **2026-08** — v0.2.15: new add-on [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit) — a more powerful vision toolkit (paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.14: **fix: add-ons / installed badges now see the bundle layer** — a feature or plugin installed via the official `dsh plugin add` (bundle) path is detected as installed (its row lives in the bundle's own patch, not the profile patch), so the Add-ons block no longer offers a duplicate install that would crash `dsh web`; `installNpmPlugin` refuses packages already registered by a bundle layer; bundle-installed add-ons are uninstalled via `dsh plugin remove` (guided in the UI) instead of profile-patch deletion.
 - **2026-08** — v0.2.13: **fix (issue #2)** — `hostPatchPath()` no longer auto-probes the profiles directory (a scan could hit a headless profile before web and make the MCP list read/write the wrong composition); extension management is bound to the **web** profile, with an explicit profile name still supported.
