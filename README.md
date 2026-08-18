@@ -1,29 +1,15 @@
 # dsh-extension-hub
 
-> **New in v0.2.15** — the **Add-ons** block now carries
-> [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit): a more
-> powerful vision toolkit — paste an image directly for image understanding,
-> UI restoration, long-screenshot analysis, and more visual tasks.
->
-> **New in v0.2.8** — **one-command install**: the package now ships a
-> bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the
-> plugin row into your profile automatically (no more manual
-> `cordis.patch.yml` edits in the quick start).
->
-> **New in v0.2.7** — the **Add-ons** block now also carries
-> [dsh-recall](https://github.com/Relistencode/dsh-recall): conversation
-> history recall for DSH — literal/fuzzy/semantic retrieval over every past
-> session, fully local & offline.
->
-> **New in v0.2.6** — A curated plugin store inside DSH: browse 400+
-> community-curated plugins (11 categories, bilingual descriptions), install
-> from npm in seconds with anti-squatting checks, search every GitHub
-> `dsh-plugin` repo — and keep them updated. Plus
-> [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.md)
-> — a companion plugin to edit your host-wide global instructions from the
-> settings page. And a new **Add-ons** block in the Plugin Management tab:
-> install, disable, uninstall and update companion features together with the
-> main plugin.
+<details>
+<summary><b>New in v0.2.15</b> — the <b>Add-ons</b> block now carries <a href="https://github.com/Anionex/dsh-vision-toolkit">dsh-vision-toolkit</a>: a more powerful vision toolkit — paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks. <i>(click to expand earlier highlights)</i></summary>
+
+**New in v0.2.8** — **one-command install**: the package now ships a bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the plugin row into your profile automatically (no more manual `cordis.patch.yml` edits in the quick start).
+
+**New in v0.2.7** — the **Add-ons** block now also carries [dsh-recall](https://github.com/Relistencode/dsh-recall): conversation history recall for DSH — literal/fuzzy/semantic retrieval over every past session, fully local & offline.
+
+**New in v0.2.6** — A curated plugin store inside DSH: browse 400+ community-curated plugins (11 categories, bilingual descriptions), install from npm in seconds with anti-squatting checks, search every GitHub `dsh-plugin` repo — and keep them updated. Plus [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.md) — a companion plugin to edit your host-wide global instructions from the settings page. And a new **Add-ons** block in the Plugin Management tab: install, disable, uninstall and update companion features together with the main plugin.
+
+</details>
 
 Manage DeepSeek Harness (DSH) skills and MCP servers from one place.
 

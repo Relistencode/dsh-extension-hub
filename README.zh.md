@@ -1,12 +1,15 @@
 # dsh-extension-hub
 
-> **v0.2.15 新功能** — **附加功能**区新增 [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit)：更强大的视觉工具包——直接粘贴图片即可进行图片理解、UI 还原、长截图分析等视觉任务。
->
-> **v0.2.8 新功能** — **一键安装**：包新增组合补丁（bundle 层），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动接线插件行，快速开始不再需要手动编辑 `cordis.patch.yml`。
->
-> **v0.2.7 新功能** — **附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)：对话历史回忆——字面/模糊/语义三层检索全部历史会话，完全本地离线，让 AI 再也不会忘记你说过的话。
->
-> **v0.2.6 新功能** — 新增**精选目录**：社区精选 400+ 插件、11 个分类、双语描述，npm 秒装（带防抢注校验）；「发现更多」可搜索全部 GitHub dsh 插件。另有 [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.zh.md) —— 在设置页编辑此主机全局指令的姊妹插件；插件管理页新增**附加功能**区，可一键安装、停用、卸载附属功能，并随主插件一起检查更新。
+<details>
+<summary><b>v0.2.15 新功能</b> — <b>附加功能</b>区新增 <a href="https://github.com/Anionex/dsh-vision-toolkit">dsh-vision-toolkit</a>：更强大的视觉工具包——直接粘贴图片即可进行图片理解、UI 还原、长截图分析等视觉任务。<i>（点击展开更早的新功能）</i></summary>
+
+**v0.2.8 新功能** — **一键安装**：包新增组合补丁（bundle 层），`dsh plugin --profile web add dsh-extension-hub` 一条命令自动接线插件行，快速开始不再需要手动编辑 `cordis.patch.yml`。
+
+**v0.2.7 新功能** — **附加功能**区新增 [dsh-recall](https://github.com/Relistencode/dsh-recall)：对话历史回忆——字面/模糊/语义三层检索全部历史会话，完全本地离线，让 AI 再也不会忘记你说过的话。
+
+**v0.2.6 新功能** — 新增**精选目录**：社区精选 400+ 插件、11 个分类、双语描述，npm 秒装（带防抢注校验）；「发现更多」可搜索全部 GitHub dsh 插件。另有 [dsh-myrules](https://github.com/Relistencode/dsh-extension-hub/blob/main/packages/dsh-myrules/README.zh.md) —— 在设置页编辑此主机全局指令的姊妹插件；插件管理页新增**附加功能**区，可一键安装、停用、卸载附属功能，并随主插件一起检查更新。
+
+</details>
 
 一站式管理 DeepSeek Harness（DSH）的 Skills 与 MCP 服务器。
 
