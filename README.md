@@ -1,7 +1,9 @@
 # dsh-extension-hub
 
 <details>
-<summary><b>New in v0.2.15</b> — the <b>Add-ons</b> block now carries <a href="https://github.com/Anionex/dsh-vision-toolkit">dsh-vision-toolkit</a>: a more powerful vision toolkit — paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks. <i>(click to expand earlier highlights)</i></summary>
+<summary><b>New in v0.2.18</b> — the <b>Add-ons</b> block now carries <a href="https://github.com/orziz/odai">odai-dsh-plugin</a> (profile-wide Odai governance & responsibility routing) and <a href="https://github.com/Han-1413141/dsh-cost-meter">dsh-cost-meter</a> (session cost & token statistics, budgets, balances and Coding Plan quotas). <i>(click to expand earlier highlights)</i></summary>
+
+**New in v0.2.15** — the **Add-ons** block now carries [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit): a more powerful vision toolkit — paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks.
 
 **New in v0.2.8** — **one-command install**: the package now ships a bundle layer, so `dsh plugin --profile web add dsh-extension-hub` wires the plugin row into your profile automatically (no more manual `cordis.patch.yml` edits in the quick start).
 
@@ -24,7 +26,7 @@ A service-oriented extension center for DeepSeek Harness: a zero-dependency pers
 **Prerequisites**: DSH installed and running (`dsh web` works), Node.js ≥ 22, pnpm ≥ 10.
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.17
+dsh plugin --profile web add dsh-extension-hub@0.2.18
 ```
 
 One command: the package ships its own composition patch (bundle layer), so the plugin row is wired into your profile automatically — no manual `cordis.patch.yml` edits. Restart `dsh web`, then open **Settings → Extension Management**.
@@ -153,6 +155,7 @@ check the registry; local git clones update via `git pull`).
 <details>
 <summary>Recent updates (click to expand)</summary>
 
+- **2026-08** — v0.2.18: two new add-ons — [odai-dsh-plugin](https://github.com/orziz/odai) (profile-wide Odai governance & responsibility routing) and [dsh-cost-meter](https://github.com/Han-1413141/dsh-cost-meter) (session cost & token statistics, budgets, balances, Coding Plan quotas, 90+ model price catalog); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
 - **2026-08** — v0.2.17: npm installs of bundle-patch add-ons now warn against mixing install paths — DSH CLI's bundle reconcile (`dsh plugin add/list/update`) appends every dependency declaring `dsh.bundle.patch` to `dsh.profile.bundles`, duplicating the manual row and crashing `dsh web` on boot (`duplicate loader entry id`, see [Discussion #2889](https://github.com/deepseek-ai/deepseek-harness/discussions/2889)); the README now carries the same guidance.
 - **2026-08** — v0.2.16: add-on installs now warn about missing runtime dependencies — the npm installer checks the downloaded package's dependencies against the profile and appends a reminder to the result message when any are absent (the install still completes; a profile-level `pnpm install` fixes loading after restart).
 - **2026-08** — v0.2.15: new add-on [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit) — a more powerful vision toolkit (paste an image directly for image understanding, UI restoration, long-screenshot analysis, and more visual tasks); install / disable / uninstall from the Add-ons block, updates together with the main plugin.
