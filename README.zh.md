@@ -19,7 +19,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.13
+dsh plugin --profile web add dsh-extension-hub@0.2.14
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
@@ -90,6 +90,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.13
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.14：**修复：附加功能/已安装徽标感知 bundle 层** — 通过官方 `dsh plugin add`（bundle 方式）安装的功能或插件现在会被识别为已安装（其注册行在 bundle 自己的 patch 里，不在 profile patch），附加功能区块不再提供会导致 `dsh web` 崩溃的重复安装;`installNpmPlugin` 拒绝已被 bundle 层注册的包;bundle 安装的附加功能通过 `dsh plugin remove` 卸载（UI 有引导）,不再误删 profile 行。
 - **2026-08** — v0.2.13：**修复（issue #2）** — `hostPatchPath()` 不再自动探测 profiles 目录（扫描可能先命中 headless,导致 MCP 列表读写错位的组合配置）；扩展管理固定绑定 **web** profile,显式指定 profile 仍受支持。
 - **2026-08** — v0.2.12：**审查修复** — MCP 导入发现遵循 Claude/Codex 优先级（项目 `.mcp.json` > 项目 `.claude.json` > 用户配置；Codex 项目 > 全局）,不再反向覆盖;MCP 列表展示 Home 层行（`$DSH_HOME/cordis.patch.yml`，只读，带徽标）;组合配置与状态写入改为原子写（临时文件+rename，带锁重试）,崩溃不会损坏 `cordis.patch.yml`;克隆安装拒绝消息区分"无 package.json"与"缺少构建产物"（git 安装取源码非产物）;README 注明 npm 安装的插件由 Extension Hub 管理,后续 `dsh plugin`/pnpm 不会丢失。
 - **2026-08** — v0.2.11：文档 —— 快速开始安装命令更新到当前版本（此前发布的包内 README 仍带着 v0.2.8 的命令）。
