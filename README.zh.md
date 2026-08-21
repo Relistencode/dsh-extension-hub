@@ -1,7 +1,9 @@
 # dsh-extension-hub
 
 <details>
-<summary><b>v0.2.18 新功能</b> — <b>附加功能</b>区新增 <a href="https://github.com/orziz/odai">odai-dsh-plugin</a>（对每个 Agent 预设生效的 Odai 治理与责任路由）与 <a href="https://github.com/Han-1413141/dsh-cost-meter">dsh-cost-meter</a>（会话成本与 token 统计、预算、余额与 Coding Plan 配额）。<i>（点击展开更早的新功能）</i></summary>
+<summary><b>v0.2.19 新功能</b> — <b>附加功能</b>区新增 <a href="https://github.com/shaobeichen/dsh-pocket">dsh-pocket</a>：把 DeepSeek Harness 装进你的口袋——电脑上跑 dsh web，手机扫码即同步访问（局域网 + 公网，实时同屏）。<i>（点击展开更早的新功能）</i></summary>
+
+**v0.2.18 新功能** — **附加功能**区新增 [odai-dsh-plugin](https://github.com/orziz/odai)（对每个 Agent 预设生效的 Odai 治理与责任路由）与 [dsh-cost-meter](https://github.com/Han-1413141/dsh-cost-meter)（会话成本与 token 统计、预算、余额与 Coding Plan 配额）。
 
 **v0.2.15 新功能** — **附加功能**区新增 [dsh-vision-toolkit](https://github.com/Anionex/dsh-vision-toolkit)：更强大的视觉工具包——直接粘贴图片即可进行图片理解、UI 还原、长截图分析等视觉任务。
 
@@ -26,7 +28,7 @@
 **环境要求**：已装好 DSH（`dsh web` 能正常运行），Node.js ≥ 22，pnpm ≥ 10。
 
 ```sh
-dsh plugin --profile web add dsh-extension-hub@0.2.18
+dsh plugin --profile web add dsh-extension-hub@0.2.19
 ```
 
 一条命令即可：包自带组合补丁（bundle 层），插件行会自动接入你的 profile，无需手动编辑 `cordis.patch.yml`。重启 `dsh web`，然后打开 **设置 → 扩展管理**。
@@ -99,6 +101,7 @@ dsh plugin --profile web add dsh-extension-hub@0.2.18
 <details>
 <summary>最近更新（点击展开）</summary>
 
+- **2026-08** — v0.2.19：**附加功能**区新增 [dsh-pocket](https://github.com/shaobeichen/dsh-pocket)——把 DeepSeek Harness 装进口袋：电脑上跑 dsh web，手机扫码即同步访问（局域网 + 公网，实时同屏）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.18：**附加功能**区新增两个插件 — [odai-dsh-plugin](https://github.com/orziz/odai)（对 profile 中每个 Agent 预设生效的 Odai 治理与责任路由）与 [dsh-cost-meter](https://github.com/Han-1413141/dsh-cost-meter)（会话成本与 token 统计、预算、余额、Coding Plan 配额、90+ 模型价格目录）；可在附加功能区一键安装/停用/卸载，并随主插件一起检查更新。
 - **2026-08** — v0.2.17：带 bundle 补丁插件的 npm 安装增加**安装路径混用警告** — DSH CLI 的 bundle reconcile（`dsh plugin add/list/update`）会把每个声明了 `dsh.bundle.patch` 的依赖追加进 `dsh.profile.bundles`，与手动注册行重复，导致 `dsh web` 启动崩溃（`duplicate loader entry id`，见 [Discussion #2889](https://github.com/deepseek-ai/deepseek-harness/discussions/2889)）；README 同步补充该指引。
 - **2026-08** — v0.2.16：附加功能安装增加**缺依赖提醒** — npm 安装器对照 profile 检查所下载插件的运行时依赖,缺失时在安装结果消息中追加提醒（安装仍照常完成;重启后若加载失败,在 profile 目录执行 `pnpm install` 补齐）。
